@@ -20,7 +20,7 @@ public class WebSocketDataStore implements CloudDataStore {
     }
 
     @Override
-    public Observable<QuotationEntity> addQuotation(String quotationName) {
+    public Observable<QuotationEntity> addSubscription(List<String> quotationName) {
         return null;
     }
 

@@ -1,10 +1,9 @@
-package com.alexandershtanko.quotations.mvvm;
+package com.alexandershtanko.quotations.data.utils;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
@@ -60,7 +59,6 @@ public abstract class RxService extends Service {
     }
 
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return new Binder();

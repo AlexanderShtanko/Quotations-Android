@@ -1,4 +1,4 @@
-package com.alexandershtanko.quotations.mvvm;
+package com.alexandershtanko.quotations.utils.mvvm;
 
 /**
  * @author Alexander Shtanko ab.shtanko@gmail.com
@@ -6,7 +6,7 @@ package com.alexandershtanko.quotations.mvvm;
  *         Copyright Ostrovok.ru
  */
 
-public interface ViewBinder {
-    void bind();
-    void unbind();
+interface ViewModel {
+    void subscribe();
+    void dispose();
 }

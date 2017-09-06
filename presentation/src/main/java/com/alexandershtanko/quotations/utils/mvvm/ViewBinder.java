@@ -1,6 +1,4 @@
-package com.alexandershtanko.quotations.mvvm;
-
-import android.view.View;
+package com.alexandershtanko.quotations.utils.mvvm;
 
 /**
  * @author Alexander Shtanko ab.shtanko@gmail.com
@@ -8,7 +6,7 @@ import android.view.View;
  *         Copyright Ostrovok.ru
  */
 
-public interface ViewHolder {
-    View getView();
-
+public interface ViewBinder {
+    void bind();
+    void unbind();
 }

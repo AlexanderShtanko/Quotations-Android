@@ -1,4 +1,4 @@
-package com.alexandershtanko.quotations.mvvm;
+package com.alexandershtanko.quotations.utils.mvvm;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -2,6 +2,8 @@ package com.alexandershtanko.quotations.domain.interactor;
 
 import com.alexandershtanko.quotations.domain.repository.QuotationsRepository;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -23,23 +25,23 @@ public class AddQuotationUseCase extends UseCase<AddQuotationUseCase.Result, Add
     }
 
     @Override
-    Observable<Result> buildUseCaseObservable(Params params) {
-        return repository.addQuotation(params);
+    Observable<AddQuotationUseCase.Result> buildUseCaseObservable(Params params) {
+        return repository.addInstruments(params);
     }
 
     public static class Params {
-        private String quotationName;
+        private List<String> quotations;
 
-        public String getQuotationName() {
-            return quotationName;
+        public List<String> getNames() {
+            return quotations;
         }
 
-        public void setQuotationName(String quotationName) {
-            this.quotationName = quotationName;
+        public void setQuotations(List<String> quotations) {
+            this.quotations = quotations;
         }
 
-        public Params(String quotationName) {
-            this.quotationName = quotationName;
+        public Params(List<String> quotations) {
+            this.quotations = quotations;
         }
     }
 

@@ -1,6 +1,8 @@
 package com.alexandershtanko.quotations.data.repository.datasource;
 
 import com.alexandershtanko.quotations.data.models.QuotationEntity;
+import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
+import com.alexandershtanko.quotations.domain.interactor.RemoveQuotationUseCase;
 
 import java.util.List;
 
@@ -14,6 +16,6 @@ import io.reactivex.Observable;
 
 public interface CloudDataStore {
     Observable<List<QuotationEntity>> getQuotations();
-    Observable<QuotationEntity> addQuotation(String quotationName);
-    Observable<QuotationEntity> removeQuotation(String quotationName);
+    Observable<AddQuotationUseCase.Result> addSubscription(List<String> instruments);
+    Observable<RemoveQuotationUseCase.Result> removeSubscription(List<String> instruments);
 }
