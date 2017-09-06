@@ -2,6 +2,8 @@ package com.alexandershtanko.quotations.data.repository.datasource;
 
 import com.alexandershtanko.quotations.data.models.QuotationEntity;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 
 /**
@@ -11,7 +13,7 @@ import io.reactivex.Observable;
  */
 
 public interface CloudDataStore {
-    Observable<QuotationEntity> getQuotations();
-    Observable<QuotationEntity> addQuotation();
-    Observable<QuotationEntity> removeQuotation();
+    Observable<List<QuotationEntity>> getQuotations();
+    Observable<QuotationEntity> addQuotation(String quotationName);
+    Observable<QuotationEntity> removeQuotation(String quotationName);
 }

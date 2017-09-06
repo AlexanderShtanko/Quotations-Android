@@ -33,16 +33,16 @@ public class QuotationsDataRepository implements QuotationsRepository {
 
     @Override
     public Observable<List<Quotation>> getQuotations(GetQuotationsUseCase.Params params) {
-        return null;
+        return cacheDataStore.getQuotations();
     }
 
     @Override
     public Observable<AddQuotationUseCase.Result> addQuotation(AddQuotationUseCase.Params params) {
-        return null;
+        return cloudDataStore.addQuotation(params.getQuotationName());
     }
 
     @Override
     public Observable<RemoveQuotationUseCase.Result> removeQuotation(RemoveQuotationUseCase.Params params) {
-        return null;
+        return cloudDataStore.removeQuotation(params.getQuotationName());
     }
 }
