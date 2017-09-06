@@ -1,13 +1,26 @@
 apply plugin: 'java'
 apply plugin: 'me.tatarka.retrolambda'
 
+//noinspection GroovyUnusedAssignment
 sourceCompatibility = "1.8"
+//noinspection GroovyUnusedAssignment
 targetCompatibility = "1.8"
 
+configurations {
+    provided
+}
+
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+    }
+}
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'io.reactivex.rxjava2:rxjava:2.1.3'
-    compile 'com.google.dagger:dagger:2.4'
+    def domainDependencies = rootProject.ext.domainDependencies
+
+    compile domainDependencies.rxJava
+    compile domainDependencies.dagger
 }
 
 

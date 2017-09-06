@@ -1,0 +1,44 @@
+ext {
+    //Android
+    androidBuildToolsVersion = "26.0.0"
+    androidMinSdkVersion = 15
+    androidTargetSdkVersion = 26
+    androidCompileSdkVersion = 26
+
+    //Libraries
+    appCompatVersion = "26.0.0-alpha1"
+    rxJavaVersion = "2.1.3"
+    butterKnifeVersion = "8.8.1"
+    rxBindingVersion = "2.0.0"
+    daggerVersion = "2.8"
+    okHttpVersion = "3.6.0"
+
+    //Testing
+    robolectricVersion = '3.1.1'
+    jUnitVersion = '4.12'
+    assertJVersion = '1.7.1'
+    mockitoVersion = '1.9.5'
+    dexmakerVersion = '1.0'
+    espressoVersion = '2.0'
+    testingSupportLibVersion = '0.1'
+
+    presentationDependencies = [
+            appCompatV7   : "com.android.support:appcompat-v7:${appCompatVersion}",
+            rxJava        : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            butterKnife   : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            rxBinding     : "com.jakewharton.rxbinding2:rxbinding:${rxBindingVersion}",
+            dagger        : "com.google.dagger:dagger:${daggerVersion}",
+            daggerCompiler: "com.google.dagger:dagger-compiler:${daggerVersion}"
+    ]
+
+    domainDependencies = [
+            rxJava: "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            dagger: "com.google.dagger:dagger:${daggerVersion}",
+    ]
+
+    dataDependencies = [
+            rxJava: "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            dagger: "com.google.dagger:dagger:${daggerVersion}",
+            okHttp: "com.squareup.okhttp3:okhttp:${okHttpVersion}"
+    ]
+}
