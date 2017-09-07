@@ -1,5 +1,6 @@
 package com.alexandershtanko.quotations.data.repository;
 
+import com.alexandershtanko.quotations.data.mappers.QuotationEntityDataMapper;
 import com.alexandershtanko.quotations.data.repository.datasource.CloudDataStore;
 import com.alexandershtanko.quotations.data.repository.datasource.DbDataStore;
 import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
@@ -13,6 +14,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
 
 /**
  * @author Alexander Shtanko ab.shtanko@gmail.com
@@ -33,19 +35,30 @@ public class QuotationsDataRepository implements QuotationsRepository {
 
     @Override
     public Observable<List<Quotation>> getQuotations(GetQuotationsUseCase.Params params) {
-        return dbDataStore.getQuotations().doOnSubscribe().doOnDispose();
+        return Observable.create((ObservableOnSubscribe<List<Quotation>>) e -> {
+            List<Quotation> quotations = dbDataStore.getQuotations();
+            if (quotations != null)
+                e.onNext(quotations);
+        }).mergeWith(cloudDataStore.getQuotations()
+                .map(QuotationEntityDataMapper::transform)
+                .doOnNext(dbDataStore::setQuotations));
     }
 
     @Override
-    public Observable<AddQuotationUseCase.Result> addInstruments(AddQuotationUseCase.Params params) {
-        dbDataStore.addInstruments(params.getNames());
-        return cloudDataStore.subscribe(params.getNames());
+    public Observable<Boolean> addInstruments(AddQuotationUseCase.Params params) {
+
+        return cloudDataStore.subscribe(params.getNames()).doOnNext(res -> {
+            if (res)
+                dbDataStore.addInstruments(params.getNames());
+        });
     }
 
     @Override
-    public Observable<RemoveQuotationUseCase.Result> removeInstruments(RemoveQuotationUseCase.Params params) {
-        dbDataStore.removeInstruments(params.getNames());
-        return cloudDataStore.unsubscribe(params.getNames());
+    public Observable<Boolean> removeInstruments(RemoveQuotationUseCase.Params params) {
+        return cloudDataStore.unsubscribe(params.getNames()).doOnNext(res -> {
+            if (res)
+                dbDataStore.removeInstruments(params.getNames());
+        });
     }
 
     @Override
@@ -53,5 +66,9 @@ public class QuotationsDataRepository implements QuotationsRepository {
         return dbDataStore.getInstruments();
     }
 
+    @Override
+    public Observable<Boolean> getConnectionState() {
+        return cloudDataStore.getConnectionState();
+    }
 
 }

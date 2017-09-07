@@ -15,7 +15,7 @@ import io.reactivex.Scheduler;
  *         Copyright Ostrovok.ru
  */
 
-public class AddQuotationUseCase extends UseCase<AddQuotationUseCase.Result, AddQuotationUseCase.Params> {
+public class AddQuotationUseCase extends UseCase<Boolean, AddQuotationUseCase.Params> {
     private final QuotationsRepository repository;
 
     @Inject
@@ -25,7 +25,7 @@ public class AddQuotationUseCase extends UseCase<AddQuotationUseCase.Result, Add
     }
 
     @Override
-    Observable<AddQuotationUseCase.Result> buildUseCaseObservable(Params params) {
+    Observable<Boolean> buildUseCaseObservable(Params params) {
         return repository.addInstruments(params);
     }
 
@@ -42,27 +42,6 @@ public class AddQuotationUseCase extends UseCase<AddQuotationUseCase.Result, Add
 
         public Params(List<String> quotations) {
             this.quotations = quotations;
-        }
-    }
-
-    public static class Result {
-        private Boolean status;
-        private String error;
-
-        public Boolean getStatus() {
-            return status;
-        }
-
-        public void setStatus(Boolean status) {
-            this.status = status;
-        }
-
-        public String getError() {
-            return error;
-        }
-
-        public void setError(String error) {
-            this.error = error;
         }
     }
 }

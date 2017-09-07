@@ -13,8 +13,8 @@ ext {
     daggerVersion = "2.8"
     okHttpVersion = "3.6.0"
     jacksonVersion = "2.4.0"
-    apacheCommonsVersion="3.3.2"
-
+    apacheCommonsVersion = "3.3.2"
+    paperVersion = "2.1"
 
     //Testing
     robolectricVersion = '3.1.1'
@@ -40,13 +40,14 @@ ext {
     ]
 
     dataDependencies = [
-            rxJava: "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
-            dagger: "com.google.dagger:dagger:${daggerVersion}",
-            okHttp: "com.squareup.okhttp3:okhttp:${okHttpVersion}",
-            jacksonCore: "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}",
+            rxJava            : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            dagger            : "com.google.dagger:dagger:${daggerVersion}",
+            okHttp            : "com.squareup.okhttp3:okhttp:${okHttpVersion}",
+            jacksonCore       : "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}",
             jacksonAnnotations: "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
-            jacksonDatabind: "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
-            apacheCommons: "org.apache.commons:commons-lang3:${apacheCommonsVersion}"
+            jacksonDatabind   : "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
+            apacheCommons     : "org.apache.commons:commons-lang3:${apacheCommonsVersion}",
+            paper             : "io.paperdb:paperdb:${paperVersion}"
 
 
     ]

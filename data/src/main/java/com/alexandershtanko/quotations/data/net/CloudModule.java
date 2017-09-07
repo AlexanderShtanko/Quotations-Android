@@ -3,7 +3,6 @@ package com.alexandershtanko.quotations.data.net;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 
 /**
  * @author Alexander Shtanko ab.shtanko@gmail.com
@@ -18,9 +17,4 @@ public class CloudModule {
         return new OkHttpClient();
     }
 
-    @Provides
-    Request provideRequest()
-    {
-        return okHttpClient;
-    }
 }

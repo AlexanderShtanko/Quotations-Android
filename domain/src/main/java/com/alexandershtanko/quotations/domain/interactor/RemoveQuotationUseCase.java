@@ -15,7 +15,7 @@ import io.reactivex.Scheduler;
  *         Copyright Ostrovok.ru
  */
 
-public class RemoveQuotationUseCase extends UseCase<RemoveQuotationUseCase.Result, RemoveQuotationUseCase.Params> {
+public class RemoveQuotationUseCase extends UseCase<Boolean, RemoveQuotationUseCase.Params> {
     private final QuotationsRepository repository;
 
     @Inject
@@ -25,7 +25,7 @@ public class RemoveQuotationUseCase extends UseCase<RemoveQuotationUseCase.Resul
     }
 
     @Override
-    Observable<Result> buildUseCaseObservable(Params params) {
+    Observable<Boolean> buildUseCaseObservable(Params params) {
         return repository.removeInstruments(params);
     }
 
@@ -42,27 +42,6 @@ public class RemoveQuotationUseCase extends UseCase<RemoveQuotationUseCase.Resul
 
         public Params(List<String> quotations) {
             this.quotations = quotations;
-        }
-    }
-
-    public static class Result {
-        private Boolean status;
-        private String error;
-
-        public Boolean getStatus() {
-            return status;
-        }
-
-        public void setStatus(Boolean status) {
-            this.status = status;
-        }
-
-        public String getError() {
-            return error;
-        }
-
-        public void setError(String error) {
-            this.error = error;
         }
     }
 }

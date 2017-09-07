@@ -17,8 +17,8 @@ import io.reactivex.Observable;
 
 public interface QuotationsRepository {
     Observable<List<Quotation>> getQuotations(GetQuotationsUseCase.Params params);
-    Observable<AddQuotationUseCase.Result> addInstruments(AddQuotationUseCase.Params params);
-    Observable<RemoveQuotationUseCase.Result> removeInstruments(RemoveQuotationUseCase.Params params);
+    Observable<Boolean> addInstruments(AddQuotationUseCase.Params params);
+    Observable<Boolean> removeInstruments(RemoveQuotationUseCase.Params params);
     Observable<List<String>> getInstruments();
     Observable<Boolean> getConnectionState();
 }

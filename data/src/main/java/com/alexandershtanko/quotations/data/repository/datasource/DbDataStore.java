@@ -14,7 +14,7 @@ import io.reactivex.Observable;
 
 public interface DbDataStore {
     void setQuotations(List<Quotation> quotations);
-    Observable<List<Quotation>> getQuotations();
+    List<Quotation> getQuotations();
 
     void addInstruments(List<String> names);
     void removeInstruments(List<String> names);

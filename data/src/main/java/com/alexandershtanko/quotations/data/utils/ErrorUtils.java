@@ -10,4 +10,12 @@ public class ErrorUtils {
     public static void log(Exception e) {
 
     }
+
+    public static void logThrowable(String tag, String s, Exception e) {
+
+    }
+
+    public static void sendThrowable(Throwable error) {
+
+    }
 }
