@@ -11,7 +11,7 @@ public class ErrorUtils {
 
     }
 
-    public static void logThrowable(String tag, String s, Exception e) {
+    public static void logThrowable(String tag, String s, Throwable e) {
 
     }
 

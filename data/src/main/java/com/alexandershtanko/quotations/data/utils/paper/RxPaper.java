@@ -4,15 +4,11 @@ package com.alexandershtanko.quotations.data.utils.paper;
 import android.content.Context;
 
 import com.alexandershtanko.quotations.data.utils.ErrorUtils;
-import com.alexandershtanko.quotations.data.utils.paper.lazy.LazyObject;
-import com.alexandershtanko.quotations.data.utils.paper.lazy.LazyObjectsLoader;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.paperdb.BuildConfig;
@@ -29,31 +25,15 @@ import io.reactivex.subjects.PublishSubject;
  **/
 public class RxPaper {
     private static final String TAG = RxPaper.class.getSimpleName();
-    private static RxPaper instance;
 
     Map<String, Map<String, PublishSubject<PaperObject>>> keyUpdatesSubjectMap = new HashMap<>();
     Map<String, PublishSubject<Map<String, PaperObject>>> bookUpdatesSubjectMap = new HashMap<>();
 
     final ConcurrentHashMap<String, Map<String, PaperObject>> bookKeyCacheMap = new ConcurrentHashMap<>();
-    private LazyObjectsLoader loader = null;
-
-    public static synchronized RxPaper getInstance() {
-        if (instance == null)
-            instance = new RxPaper();
-        return instance;
-    }
 
     public void init(Context context) {
         Paper.init(context);
 
-        loader = new LazyObjectsLoader() {
-            @Override
-            public <T> PaperObject<T> load(String book, String key) {
-                return readOnce(book, key, false);
-            }
-        };
-
-        loader.start();
     }
 
     public void clearCache() {
@@ -64,7 +44,6 @@ public class RxPaper {
 
     public void destroy() {
         try {
-            loader.stop();
             keyUpdatesSubjectMap.clear();
             bookUpdatesSubjectMap.clear();
             bookKeyCacheMap.clear();
@@ -112,29 +91,6 @@ public class RxPaper {
                 }).subscribeOn(Schedulers.io());
     }
 
-
-    public <T> Observable<List<LazyObject<T>>> readLazy(String bookName) {
-        return Observable.create((ObservableOnSubscribe<List<LazyObject<T>>>) subscriber -> {
-            List<String> keys = getKeys(bookName);
-
-            List<LazyObject<T>> list = getLazyObjects(bookName, keys);
-            subscriber.onNext(list);
-        }).mergeWith(getBookUpdatesSubject(bookName).map(Map::keySet).map(new Func1<Set<String>, List<LazyObject<T>>>() {
-            @Override
-            public List<LazyObject<T>> call(Set<String> set) {
-                return getLazyObjects(bookName, new ArrayList<>(set));
-            }
-        })).subscribeOn(Schedulers.computation());
-    }
-
-    private <T> List<LazyObject<T>> getLazyObjects(String book, List<String> keys) {
-        List<LazyObject<T>> list = new ArrayList<>();
-        for (String key : keys) {
-            list.add(new LazyObject<>(book, key, loader));
-        }
-
-        return list;
-    }
 
 
     public <T> Map<String, PaperObject<T>> readOnce(String bookName) {

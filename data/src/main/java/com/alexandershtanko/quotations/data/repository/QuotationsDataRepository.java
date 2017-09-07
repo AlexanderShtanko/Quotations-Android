@@ -2,7 +2,7 @@ package com.alexandershtanko.quotations.data.repository;
 
 import com.alexandershtanko.quotations.data.mappers.QuotationEntityDataMapper;
 import com.alexandershtanko.quotations.data.repository.datasource.CloudDataStore;
-import com.alexandershtanko.quotations.data.repository.datasource.DbDataStore;
+import com.alexandershtanko.quotations.data.repository.datasource.CacheDataStore;
 import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetQuotationsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.RemoveQuotationUseCase;
@@ -25,23 +25,23 @@ import io.reactivex.ObservableOnSubscribe;
 public class QuotationsDataRepository implements QuotationsRepository {
 
     private final CloudDataStore cloudDataStore;
-    private final DbDataStore dbDataStore;
+    private final CacheDataStore cacheDataStore;
 
     @Inject
-    public QuotationsDataRepository(CloudDataStore cloudDataStore, DbDataStore dbDataStore) {
+    public QuotationsDataRepository(CloudDataStore cloudDataStore, CacheDataStore cacheDataStore) {
         this.cloudDataStore = cloudDataStore;
-        this.dbDataStore = dbDataStore;
+        this.cacheDataStore = cacheDataStore;
     }
 
     @Override
     public Observable<List<Quotation>> getQuotations(GetQuotationsUseCase.Params params) {
         return Observable.create((ObservableOnSubscribe<List<Quotation>>) e -> {
-            List<Quotation> quotations = dbDataStore.getQuotations();
+            List<Quotation> quotations = cacheDataStore.getQuotations();
             if (quotations != null)
                 e.onNext(quotations);
         }).mergeWith(cloudDataStore.getQuotations()
                 .map(QuotationEntityDataMapper::transform)
-                .doOnNext(dbDataStore::setQuotations));
+                .doOnNext(cacheDataStore::setQuotations));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class QuotationsDataRepository implements QuotationsRepository {
 
         return cloudDataStore.subscribe(params.getNames()).doOnNext(res -> {
             if (res)
-                dbDataStore.addInstruments(params.getNames());
+                cacheDataStore.addInstruments(params.getNames());
         });
     }
 
@@ -57,13 +57,13 @@ public class QuotationsDataRepository implements QuotationsRepository {
     public Observable<Boolean> removeInstruments(RemoveQuotationUseCase.Params params) {
         return cloudDataStore.unsubscribe(params.getNames()).doOnNext(res -> {
             if (res)
-                dbDataStore.removeInstruments(params.getNames());
+                cacheDataStore.removeInstruments(params.getNames());
         });
     }
 
     @Override
     public Observable<List<String>> getInstruments() {
-        return dbDataStore.getInstruments();
+        return cacheDataStore.getInstruments();
     }
 
     @Override

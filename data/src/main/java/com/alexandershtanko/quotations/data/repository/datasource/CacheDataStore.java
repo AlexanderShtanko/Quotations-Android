@@ -12,7 +12,7 @@ import io.reactivex.Observable;
  *         Copyright Ostrovok.ru
  */
 
-public interface DbDataStore {
+public interface CacheDataStore {
     void setQuotations(List<Quotation> quotations);
     List<Quotation> getQuotations();
 

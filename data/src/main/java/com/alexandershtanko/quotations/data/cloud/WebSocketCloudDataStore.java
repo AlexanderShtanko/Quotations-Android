@@ -1,4 +1,4 @@
-package com.alexandershtanko.quotations.data.net;
+package com.alexandershtanko.quotations.data.cloud;
 
 import com.alexandershtanko.quotations.data.mappers.DataMapper;
 import com.alexandershtanko.quotations.data.models.QuotationsResponseEntity;
