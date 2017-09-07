@@ -39,17 +39,19 @@ public class QuotationsDataRepository implements QuotationsRepository {
     @Override
     public Observable<AddQuotationUseCase.Result> addInstruments(AddQuotationUseCase.Params params) {
         dbDataStore.addInstruments(params.getNames());
-        return cloudDataStore.addSubscription(params.getNames());
+        return cloudDataStore.subscribe(params.getNames());
     }
 
     @Override
     public Observable<RemoveQuotationUseCase.Result> removeInstruments(RemoveQuotationUseCase.Params params) {
         dbDataStore.removeInstruments(params.getNames());
-        return cloudDataStore.removeSubscription(params.getNames());
+        return cloudDataStore.unsubscribe(params.getNames());
     }
 
     @Override
     public Observable<List<String>> getInstruments() {
         return dbDataStore.getInstruments();
     }
+
+
 }

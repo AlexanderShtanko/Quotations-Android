@@ -52,6 +52,10 @@ dependencies {
     compile dataDependencies.rxJava
     compile dataDependencies.dagger
     compile dataDependencies.okHttp
+    compile dataDependencies.jacksonCore
+    compile dataDependencies.jacksonAnnotations
+    compile dataDependencies.jacksonDatabind
+    compile dataDependencies.apacheCommons
 
 
 

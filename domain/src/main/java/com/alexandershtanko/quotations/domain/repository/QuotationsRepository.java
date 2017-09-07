@@ -20,4 +20,5 @@ public interface QuotationsRepository {
     Observable<AddQuotationUseCase.Result> addInstruments(AddQuotationUseCase.Params params);
     Observable<RemoveQuotationUseCase.Result> removeInstruments(RemoveQuotationUseCase.Params params);
     Observable<List<String>> getInstruments();
+    Observable<Boolean> getConnectionState();
 }
