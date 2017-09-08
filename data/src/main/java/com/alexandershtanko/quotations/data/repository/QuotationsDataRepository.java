@@ -1,10 +1,9 @@
 package com.alexandershtanko.quotations.data.repository;
 
 import com.alexandershtanko.quotations.data.mappers.QuotationEntityDataMapper;
-import com.alexandershtanko.quotations.data.repository.datasource.CloudDataStore;
 import com.alexandershtanko.quotations.data.repository.datasource.CacheDataStore;
+import com.alexandershtanko.quotations.data.repository.datasource.CloudDataStore;
 import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
-import com.alexandershtanko.quotations.domain.interactor.GetQuotationsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.RemoveQuotationUseCase;
 import com.alexandershtanko.quotations.domain.models.Quotation;
 import com.alexandershtanko.quotations.domain.repository.QuotationsRepository;
@@ -62,13 +61,20 @@ public class QuotationsDataRepository implements QuotationsRepository {
     }
 
     @Override
+    public Observable<List<String>> getSelectedInstruments() {
+        return cacheDataStore.getSelectedInstruments();
+    }
+
+    @Override
     public Observable<List<String>> getInstruments() {
         return cacheDataStore.getInstruments();
     }
+
 
     @Override
     public Observable<Boolean> getConnectionState() {
         return cloudDataStore.getConnectionState();
     }
+
 
 }

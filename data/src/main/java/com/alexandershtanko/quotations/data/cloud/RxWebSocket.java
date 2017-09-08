@@ -37,7 +37,7 @@ public class RxWebSocket {
     }
 
     public Observable<Boolean> sendMessage(String message) {
-        return onConnected().map(ws -> ws.send(message));
+        return onConnected().firstElement().toObservable().map(ws -> ws.send(message));
     }
 
     public Observable<String> getMessagesObservable() {

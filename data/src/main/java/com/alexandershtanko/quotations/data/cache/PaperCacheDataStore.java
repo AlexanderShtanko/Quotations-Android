@@ -22,10 +22,12 @@ public class PaperCacheDataStore implements CacheDataStore {
     public static final String KEY_INSTRUMENTS = "instruments";
     private final RxPaper rxPaper;
     private final static String BOOK_MAIN = "main";
+    private final List<String> instruments;
 
     @Inject
-    public PaperCacheDataStore(RxPaper rxPaper) {
+    public PaperCacheDataStore(RxPaper rxPaper,List<String> instruments) {
         this.rxPaper = rxPaper;
+        this.instruments=instruments;
     }
 
     @Override
@@ -65,13 +67,18 @@ public class PaperCacheDataStore implements CacheDataStore {
     }
 
     @Override
-    public Observable<List<String>> getInstruments() {
+    public Observable<List<String>> getSelectedInstruments() {
         Observable<RxPaper.PaperObject<List<String>>> observable = rxPaper.read(BOOK_MAIN, KEY_INSTRUMENTS);
 
         return observable.map(objectPaperObject -> {
             if (objectPaperObject != null && objectPaperObject.getObject() != null)
                 return objectPaperObject.getObject();
-            return new ArrayList<String>();
+            return instruments;
         });
+    }
+
+    @Override
+    public Observable<List<String>> getInstruments() {
+        return Observable.just(instruments);
     }
 }

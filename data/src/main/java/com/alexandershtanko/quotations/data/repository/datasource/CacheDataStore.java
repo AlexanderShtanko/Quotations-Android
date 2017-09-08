@@ -18,5 +18,6 @@ public interface CacheDataStore {
 
     void addInstruments(List<String> names);
     void removeInstruments(List<String> names);
+    Observable<List<String>> getSelectedInstruments();
     Observable<List<String>> getInstruments();
 }

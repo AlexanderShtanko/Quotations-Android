@@ -1,5 +1,7 @@
 package com.alexandershtanko.quotations.viewmodels;
 
+import com.alexandershtanko.quotations.data.utils.ErrorUtils;
+import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetConnectionStateUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetQuotationsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetSelectedInstrumentsUseCase;
@@ -7,7 +9,6 @@ import com.alexandershtanko.quotations.domain.interactor.RemoveQuotationUseCase;
 import com.alexandershtanko.quotations.domain.models.Quotation;
 import com.alexandershtanko.quotations.utils.mvvm.RxViewModel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,18 +28,25 @@ public class QuotationsViewModel extends RxViewModel {
     private final RemoveQuotationUseCase removeQuotationUseCase;
     private final GetConnectionStateUseCase getConnectionStateUseCase;
     private final GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase;
+    private final AddQuotationUseCase addQuotationUseCase;
 
     @Inject
-    public QuotationsViewModel(GetQuotationsUseCase getQuotationsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, RemoveQuotationUseCase removeQuotationUseCase, GetConnectionStateUseCase getConnectionStateUseCase) {
+    public QuotationsViewModel(GetQuotationsUseCase getQuotationsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, RemoveQuotationUseCase removeQuotationUseCase, GetConnectionStateUseCase getConnectionStateUseCase, AddQuotationUseCase addQuotationUseCase) {
         this.getQuotationUseCase = getQuotationsUseCase;
         this.removeQuotationUseCase = removeQuotationUseCase;
         this.getConnectionStateUseCase = getConnectionStateUseCase;
         this.getSelectedInstrumentsUseCase = getSelectedInstrumentsUseCase;
+        this.addQuotationUseCase = addQuotationUseCase;
     }
 
     @Override
     protected void onSubscribe(CompositeDisposable s) {
-        s.add(getSelectedInstrumentsUseCase.execute().switchMap(instruments->).subscribe());
+        s.add(getConnectionState()
+                .filter(state -> state)
+                .switchMap(state -> getSelectedInstrumentsUseCase.execute().firstElement().toObservable())
+                .switchMap(instruments -> addQuotationUseCase.execute(new AddQuotationUseCase.Params(instruments)))
+                .subscribe(state -> {
+                }, ErrorUtils::log));
     }
 
     public Observable<List<Quotation>> getQuotations() {

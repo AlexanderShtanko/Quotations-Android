@@ -15,11 +15,11 @@ import io.reactivex.Scheduler;
  *         Copyright Ostrovok.ru
  */
 
-public class GetSelectedInstrumentsUseCase extends UseCase<List<String>,Object> {
+public class GetInstrumentsUseCase extends UseCase<List<String>,Object> {
     private final QuotationsRepository repository;
 
     @Inject
-    public GetSelectedInstrumentsUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
+    public GetInstrumentsUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
         super(subscriptionScheduler);
         this.repository = repository;
     }
@@ -30,6 +30,6 @@ public class GetSelectedInstrumentsUseCase extends UseCase<List<String>,Object> 
 
     @Override
     Observable<List<String>> buildUseCaseObservable(Object aVoid) {
-        return repository.getSelectedInstruments();
+        return repository.getInstruments();
     }
 }
