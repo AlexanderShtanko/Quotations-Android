@@ -7,6 +7,7 @@ import com.alexandershtanko.quotations.domain.interactor.RemoveQuotationUseCase;
 import com.alexandershtanko.quotations.domain.models.Quotation;
 import com.alexandershtanko.quotations.utils.mvvm.RxViewModel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class QuotationsViewModel extends RxViewModel {
 
     @Override
     protected void onSubscribe(CompositeDisposable s) {
-//        s.add(getSelectedInstrumentsUseCase.execute().first(new ArrayList<>()).subscribe());
+        s.add(getSelectedInstrumentsUseCase.execute().switchMap(instruments->).subscribe());
     }
 
     public Observable<List<Quotation>> getQuotations() {

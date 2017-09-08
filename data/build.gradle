@@ -60,10 +60,14 @@ dependencies {
     compile dataDependencies.apacheCommons
     compile dataDependencies.paper
 
+    androidTestCompile testDependencies.junit
+    androidTestCompile testDependencies.assertj
+    androidTestCompile testDependencies.mockito
+    androidTestCompile testDependencies.robolectric
+    androidTestCompile presentationTestDependencies.testingSupportLib
+
+
     testCompile testDependencies.junit
-    testCompile testDependencies.assertj
-    testCompile testDependencies.mockito
-    testCompile testDependencies.robolectric
 
 
 

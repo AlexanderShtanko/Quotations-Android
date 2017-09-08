@@ -49,6 +49,7 @@ android {
 
 dependencies {
     def presentationDependencies = rootProject.ext.presentationDependencies
+    def presentationTestDependencies = rootProject.ext.presentationTestDependencies
 
     compile project(path: ':domain')
     compile project(path: ':data')
@@ -66,4 +67,16 @@ dependencies {
     compile presentationDependencies.dagger
     annotationProcessor presentationDependencies.daggerCompiler
 
+    androidTestCompile presentationTestDependencies.mockito
+    androidTestCompile presentationTestDependencies.dexmaker
+    androidTestCompile presentationTestDependencies.dexmakerMockito
+    androidTestCompile presentationTestDependencies.espresso
+    androidTestCompile presentationTestDependencies.testingSupportLib
+
+    testCompile presentationTestDependencies.junit
+
+
 }
+
+configurations.all { resolutionStrategy { force 'org.objenesis:objenesis:2.1' } }
+
