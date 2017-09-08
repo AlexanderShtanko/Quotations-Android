@@ -84,7 +84,7 @@ public class QuotationsViewHolder extends RxViewHolder {
                     }, ErrorUtils::log));
 
             s.add(viewModel.getQuotations().throttleLast(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setQuotations, ErrorUtils::log));
-            s.add(viewModel.getConnectionState().throttleLast(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setConnectionState, ErrorUtils::log))
+            s.add(viewModel.getConnectionState().throttleLast(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setConnectionState, ErrorUtils::log));
         }
     }
 
