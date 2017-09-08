@@ -1,9 +1,6 @@
 package com.alexandershtanko.quotations.domain.interactor;
 
-import com.alexandershtanko.quotations.domain.models.Quotation;
 import com.alexandershtanko.quotations.domain.repository.QuotationsRepository;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -16,22 +13,21 @@ import io.reactivex.Scheduler;
  *         Copyright Ostrovok.ru
  */
 
-public class GetQuotationsUseCase extends UseCase<List<Quotation>, Void> {
+public class GetConnectionStateUseCase extends UseCase<Boolean, Void> {
     private final QuotationsRepository repository;
 
     @Inject
-    public GetQuotationsUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
+    public GetConnectionStateUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
         super(subscriptionScheduler);
         this.repository = repository;
     }
 
-    public Observable<List<Quotation>> execute() {
+    public Observable<Boolean> execute() {
         return execute(null);
     }
 
     @Override
-    Observable<List<Quotation>> buildUseCaseObservable(Void aVoid) {
-        return repository.getQuotations();
+    Observable<Boolean> buildUseCaseObservable(Void aVoid) {
+        return repository.getConnectionState();
     }
-
 }

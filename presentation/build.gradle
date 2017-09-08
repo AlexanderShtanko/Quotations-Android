@@ -3,7 +3,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 
 android {
-    def globalConfig=rootProject.ext
+    def globalConfig = rootProject.ext
 
     compileSdkVersion globalConfig.androidCompileSdkVersion
     buildToolsVersion globalConfig.androidBuildToolsVersion
@@ -42,7 +42,8 @@ android {
         abortOnError false
         ignoreWarnings true
         disable 'InvalidPackage'            //Some libraries have issues with this.
-        disable 'OldTargetApi'              //Lint gives this warning but SDK 20 would be Android L Beta.
+        disable 'OldTargetApi'
+        //Lint gives this warning but SDK 20 would be Android L Beta.
     }
 }
 
@@ -54,6 +55,11 @@ dependencies {
 
 
     compile presentationDependencies.appCompatV7
+    compile presentationDependencies.design
+    compile presentationDependencies.supportAnnotations
+    compile presentationDependencies.recyclerView
+    compile presentationDependencies.cardView
+
     compile presentationDependencies.rxJava
     compile presentationDependencies.butterKnife
     compile presentationDependencies.rxBinding

@@ -34,7 +34,7 @@ public class QuotationsDataRepository implements QuotationsRepository {
     }
 
     @Override
-    public Observable<List<Quotation>> getQuotations(GetQuotationsUseCase.Params params) {
+    public Observable<List<Quotation>> getQuotations() {
         return Observable.create((ObservableOnSubscribe<List<Quotation>>) e -> {
             List<Quotation> quotations = cacheDataStore.getQuotations();
             if (quotations != null)

@@ -7,15 +7,17 @@ package com.alexandershtanko.quotations.data.utils;
  */
 
 public class ErrorUtils {
-    public static void log(Exception e) {
+
+
+    public static void log(String tag, String message, Throwable throwable) {
 
     }
 
-    public static void logThrowable(String tag, String s, Throwable e) {
+    public static void log(Throwable throwable) {
 
     }
 
-    public static void sendThrowable(Throwable error) {
+    public static void log(String tag, Throwable throwable) {
 
     }
 }

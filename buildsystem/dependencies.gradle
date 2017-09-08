@@ -26,17 +26,35 @@ ext {
     testingSupportLibVersion = '0.1'
 
     presentationDependencies = [
-            appCompatV7   : "com.android.support:appcompat-v7:${appCompatVersion}",
-            rxJava        : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
-            butterKnife   : "com.jakewharton:butterknife:${butterKnifeVersion}",
-            rxBinding     : "com.jakewharton.rxbinding2:rxbinding:${rxBindingVersion}",
-            dagger        : "com.google.dagger:dagger:${daggerVersion}",
-            daggerCompiler: "com.google.dagger:dagger-compiler:${daggerVersion}"
+            appCompatV7       : "com.android.support:appcompat-v7:${appCompatVersion}",
+            design            : "com.android.support:design:${appCompatVersion}",
+            cardView          : "com.android.support:cardview-v7:${appCompatVersion}",
+            supportAnnotations: "com.android.support:support-annotations:${appCompatVersion}",
+            recyclerView      : "com.android.support:recyclerview-v7:${appCompatVersion}",
+            rxJava            : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            butterKnife       : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            rxBinding         : "com.jakewharton.rxbinding2:rxbinding:${rxBindingVersion}",
+            dagger            : "com.google.dagger:dagger:${daggerVersion}",
+            daggerCompiler    : "com.google.dagger:dagger-compiler:${daggerVersion}"
+    ]
+
+    presentationTestDependencies = [
+            mockito          : "org.mockito:mockito-core:${mockitoVersion}",
+            dexmaker         : "com.google.dexmaker:dexmaker:${dexmakerVersion}",
+            dexmakerMockito  : "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}",
+            espresso         : "com.android.support.test.espresso:espresso-core:${espressoVersion}",
+            testingSupportLib: "com.android.support.test:testing-support-lib:${testingSupportLibVersion}",
     ]
 
     domainDependencies = [
             rxJava: "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
             dagger: "com.google.dagger:dagger:${daggerVersion}",
+    ]
+
+    domainTestDependencies = [
+            junit  : "junit:junit:${jUnitVersion}",
+            mockito: "org.mockito:mockito-core:${mockitoVersion}",
+            assertj: "org.assertj:assertj-core:${assertJVersion}"
     ]
 
     dataDependencies = [
@@ -50,5 +68,12 @@ ext {
             paper             : "io.paperdb:paperdb:${paperVersion}"
 
 
+    ]
+
+    dataTestDependencies = [
+            junit      : "junit:junit:${jUnitVersion}",
+            assertj    : "org.assertj:assertj-core:${assertJVersion}",
+            mockito    : "org.mockito:mockito-core:${mockitoVersion}",
+            robolectric: "org.robolectric:robolectric:${robolectricVersion}",
     ]
 }

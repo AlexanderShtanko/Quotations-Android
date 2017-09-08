@@ -20,11 +20,11 @@ public abstract class RxActivity<H extends RxViewHolder, M extends RxViewModel> 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        viewModel = createViewModel();
+        viewModel = initViewModel();
 
         super.onCreate(savedInstanceState);
 
-        viewHolder = createViewHolder();
+        viewHolder = initViewHolder();
         setContentView(viewHolder.getView());
 
         viewBinder = createViewBinder(viewHolder, viewModel);

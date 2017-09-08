@@ -49,7 +49,7 @@ public class RxPaper {
             bookKeyCacheMap.clear();
 
         } catch (Exception e) {
-            ErrorUtils.sendThrowable(e);
+            ErrorUtils.log(e);
         }
     }
 
@@ -155,7 +155,7 @@ public class RxPaper {
 
                 getBookUpdatesSubject(bookName).onNext(map);
             } catch (StackOverflowError error) {
-                ErrorUtils.sendThrowable(error);
+                ErrorUtils.log(error);
             }
         }
 
@@ -197,7 +197,7 @@ public class RxPaper {
 
                 getBookUpdatesSubject(bookName).onNext(map);
             } catch (StackOverflowError error) {
-                ErrorUtils.sendThrowable(error);
+                ErrorUtils.log(error);
             }
         }
 
@@ -232,7 +232,7 @@ public class RxPaper {
                 Paper.book(bookName).destroy();
             } catch (Exception e) {
                 if (BuildConfig.DEBUG)
-                    ErrorUtils.logThrowable(TAG, "", e);
+                    ErrorUtils.log(TAG, "", e);
             }
 
             try {
@@ -242,7 +242,7 @@ public class RxPaper {
                     bookKeyCacheMap.remove(bookName);
             } catch (Exception e) {
                 if (BuildConfig.DEBUG)
-                    ErrorUtils.logThrowable(TAG, "", e);
+                    ErrorUtils.log(TAG, "", e);
             }
         }
     }

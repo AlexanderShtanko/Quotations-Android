@@ -47,6 +47,8 @@ android {
 
 dependencies {
     def dataDependencies = rootProject.ext.dataDependencies
+    def testDependencies = rootProject.ext.dataTestDependencies
+
     compile project(':domain')
 
     compile dataDependencies.rxJava
@@ -57,6 +59,11 @@ dependencies {
     compile dataDependencies.jacksonDatabind
     compile dataDependencies.apacheCommons
     compile dataDependencies.paper
+
+    testCompile testDependencies.junit
+    testCompile testDependencies.assertj
+    testCompile testDependencies.mockito
+    testCompile testDependencies.robolectric
 
 
 

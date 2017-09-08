@@ -33,7 +33,7 @@ public abstract class RxFragment<H extends RxViewHolder, M extends RxViewModel> 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        viewHolder = createViewHolder();
+        viewHolder = initViewHolder();
         return viewHolder.getView();
 
     }
@@ -54,7 +54,7 @@ public abstract class RxFragment<H extends RxViewHolder, M extends RxViewModel> 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.activity = getActivity();
-        viewModel = createViewModel();
+        viewModel = initViewModel();
         viewModel.subscribe();
     }
 

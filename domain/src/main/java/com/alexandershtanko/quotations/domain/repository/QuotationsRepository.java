@@ -1,7 +1,6 @@
 package com.alexandershtanko.quotations.domain.repository;
 
 import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
-import com.alexandershtanko.quotations.domain.interactor.GetQuotationsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.RemoveQuotationUseCase;
 import com.alexandershtanko.quotations.domain.models.Quotation;
 
@@ -16,7 +15,7 @@ import io.reactivex.Observable;
  */
 
 public interface QuotationsRepository {
-    Observable<List<Quotation>> getQuotations(GetQuotationsUseCase.Params params);
+    Observable<List<Quotation>> getQuotations();
     Observable<Boolean> addInstruments(AddQuotationUseCase.Params params);
     Observable<Boolean> removeInstruments(RemoveQuotationUseCase.Params params);
     Observable<List<String>> getInstruments();
