@@ -19,7 +19,7 @@ public class AddQuotationUseCase extends UseCase<Boolean, AddQuotationUseCase.Pa
     private final QuotationsRepository repository;
 
     @Inject
-    AddQuotationUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
+    public AddQuotationUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
         super(subscriptionScheduler);
         this.repository = repository;
     }

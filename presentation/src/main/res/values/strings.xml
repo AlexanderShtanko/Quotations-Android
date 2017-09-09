@@ -8,8 +8,10 @@
     <string name="spread">spread</string>
     <string name="save">Save</string>
     <string name="desc_help">How to works with the app</string>
-    <string name="remove_ok">Quotation removed successfully</string>
-    <string name="remove_failed">Quotation deletion was failed, check Internet connection and try again.</string>
+    <string name="remove_ok">Instruments removed successfully</string>
+    <string name="remove_failed">Instruments deletion was failed, check Internet connection and try again.</string>
+    <string name="add_ok">Instruments added successfully</string>
+    <string name="add_failed">Instruments deletion was failed, check Internet connection and try again.</string>
     <string name="status">Status</string>
     <string name="connected">connected</string>
     <string name="disconnected">disconnected</string>

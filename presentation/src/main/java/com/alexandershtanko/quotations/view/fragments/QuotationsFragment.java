@@ -1,5 +1,6 @@
 package com.alexandershtanko.quotations.view.fragments;
 
+import com.alexandershtanko.quotations.App;
 import com.alexandershtanko.quotations.R;
 import com.alexandershtanko.quotations.utils.mvvm.RxFragment;
 import com.alexandershtanko.quotations.utils.mvvm.RxViewBinder;
@@ -25,7 +26,9 @@ public class QuotationsFragment extends RxFragment<QuotationsViewHolder, Quotati
     }
 
     @Override
-    public QuotationsViewModel initViewModel() {
+    public QuotationsViewModel initViewModel()
+    {
+        App.getComponent().inject(this);
         return viewModel;
     }
 

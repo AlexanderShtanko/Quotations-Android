@@ -1,5 +1,6 @@
 package com.alexandershtanko.quotations.viewmodels;
 
+import com.alexandershtanko.quotations.data.utils.ErrorUtils;
 import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetInstrumentsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetSelectedInstrumentsUseCase;
@@ -26,8 +27,12 @@ public class InstrumentsViewModel extends RxViewModel {
     private final GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase;
     private final AddQuotationUseCase addQuotationUseCase;
     private final RemoveQuotationUseCase removeQuotationUseCase;
-    private PublishSubject<String> addInstrumentSubject=PublishSubject.create();
-    private PublishSubject<String> removeInstrumentSubject=PublishSubject.create();
+    private PublishSubject<String> addInstrumentSubject = PublishSubject.create();
+    private PublishSubject<String> removeInstrumentSubject = PublishSubject.create();
+
+    private PublishSubject<Boolean> addResultSubject = PublishSubject.create();
+    private PublishSubject<Boolean> removeResultSubject = PublishSubject.create();
+
 
     @Inject
     public InstrumentsViewModel(GetInstrumentsUseCase getInstrumentsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, AddQuotationUseCase addQuotationUseCase, RemoveQuotationUseCase removeQuotationUseCase) {
@@ -39,7 +44,15 @@ public class InstrumentsViewModel extends RxViewModel {
 
     @Override
     protected void onSubscribe(CompositeDisposable s) {
-        s.add(addInstrumentSubject.flatMap(instrument->))
+        s.add(addInstrumentSubject
+                .buffer(500)
+                .flatMap(instruments -> addQuotationUseCase.execute(new AddQuotationUseCase.Params(instruments)))
+                .subscribe(addResultSubject::onNext, ErrorUtils::log));
+
+        s.add(removeInstrumentSubject
+                .buffer(500)
+                .flatMap(instruments -> removeQuotationUseCase.execute(new RemoveQuotationUseCase.Params(instruments)))
+                .subscribe(removeResultSubject::onNext, ErrorUtils::log));
     }
 
     public Observable<List<String>> getInstruments() {
@@ -50,14 +63,19 @@ public class InstrumentsViewModel extends RxViewModel {
         return getSelectedInstrumentsUseCase.execute();
     }
 
-
     public void addInstrument(String instrument) {
         addInstrumentSubject.onNext(instrument);
     }
 
-    public Observable<Boolean> removeInstrument(String> instrument) {
-        return removeQuotationUseCase.execute(new RemoveQuotationUseCase.Params(instrument));
-
+    public void removeInstrument(String instrument) {
+        removeInstrumentSubject.onNext(instrument);
     }
 
+    public Observable<Boolean> getAddResult() {
+        return addResultSubject;
+    }
+
+    public Observable<Boolean> getRemoveResult() {
+        return removeResultSubject;
+    }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import com.alexandershtanko.quotations.R;
 import com.alexandershtanko.quotations.data.utils.ErrorUtils;
@@ -14,6 +15,7 @@ import com.alexandershtanko.quotations.utils.mvvm.RxViewHolder;
 import com.alexandershtanko.quotations.viewmodels.InstrumentsViewModel;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -50,6 +52,20 @@ public class InstrumentsViewHolder extends RxViewHolder {
                             .map(selected -> new Pair<>(instruments, selected))).firstElement().toObservable()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::populate, ErrorUtils::log));
+
+            s.add(viewModel.getAddResult()
+                    .throttleLast(500, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(res -> {
+                        Toast.makeText(viewHolder.getContext(), res ? R.string.add_ok : R.string.add_failed, Toast.LENGTH_SHORT).show();
+                    }, ErrorUtils::log));
+
+            s.add(viewModel.getRemoveResult()
+                    .throttleLast(500, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(res -> {
+                        Toast.makeText(viewHolder.getContext(), res ? R.string.remove_ok : R.string.remove_failed, Toast.LENGTH_SHORT).show();
+                    }, ErrorUtils::log));
         }
 
         private void populate(Pair<List<String>, List<String>> pair) {

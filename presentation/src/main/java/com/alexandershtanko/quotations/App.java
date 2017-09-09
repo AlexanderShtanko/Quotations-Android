@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.alexandershtanko.quotations.di.components.AppComponent;
 import com.alexandershtanko.quotations.di.components.DaggerAppComponent;
-import com.alexandershtanko.quotations.di.modules.AppModule;
 
 /**
  * @author Alexander Shtanko ab.shtanko@gmail.com
@@ -23,7 +22,6 @@ public class App extends Application {
 
     private AppComponent buildComponent() {
         return DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
                 .build();
     }
 

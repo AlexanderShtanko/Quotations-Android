@@ -1,14 +1,11 @@
 package com.alexandershtanko.quotations.data.repository;
 
-import com.alexandershtanko.quotations.data.cache.PaperCacheDataStore;
-import com.alexandershtanko.quotations.data.cloud.WebSocketCloudDataStore;
-import com.alexandershtanko.quotations.data.repository.datasource.CacheDataStore;
-import com.alexandershtanko.quotations.data.repository.datasource.CloudDataStore;
-
-import javax.inject.Singleton;
+import com.alexandershtanko.quotations.domain.repository.QuotationsRepository;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by aleksandr on 07.09.17.
@@ -16,16 +13,12 @@ import dagger.Provides;
 @Module
 public class RepositoryModule {
     @Provides
-    @Singleton
-    public CloudDataStore provideCloudDataStore(WebSocketCloudDataStore dataStore)
-    {
-        return dataStore;
+    public Scheduler getScheduler() {
+        return Schedulers.io();
     }
 
     @Provides
-    @Singleton
-    public CacheDataStore provideCloudDataStore(PaperCacheDataStore dataStore)
-    {
-        return dataStore;
+    public QuotationsRepository provideQuotationRepository(QuotationsDataRepository repository) {
+        return repository;
     }
 }

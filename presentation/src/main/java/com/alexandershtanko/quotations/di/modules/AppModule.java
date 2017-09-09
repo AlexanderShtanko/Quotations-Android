@@ -13,6 +13,7 @@ import dagger.Provides;
  *         Copyright Ostrovok.ru
  */
 @Module
+@Singleton
 public class AppModule {
     Context appContext;
     public AppModule(Context appContext)
