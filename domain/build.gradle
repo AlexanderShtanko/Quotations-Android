@@ -21,6 +21,7 @@ dependencies {
 
     compile domainDependencies.rxJava
     compile domainDependencies.dagger
+
 }
 
 

@@ -28,7 +28,7 @@ public class QuotationsFragment extends RxFragment<QuotationsViewHolder, Quotati
     @Override
     public QuotationsViewModel initViewModel()
     {
-        App.getComponent().inject(this);
+        App.getFragmentsComponent().inject(this);
         return viewModel;
     }
 

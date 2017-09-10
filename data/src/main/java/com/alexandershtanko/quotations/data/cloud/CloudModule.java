@@ -1,9 +1,8 @@
 package com.alexandershtanko.quotations.data.cloud;
 
+import com.alexandershtanko.quotations.data.mappers.DataMapper;
 import com.alexandershtanko.quotations.data.repository.datasource.CloudDataStore;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -15,35 +14,40 @@ import okhttp3.Request;
  *         Created on 07/09/2017.
  *         Copyright Ostrovok.ru
  */
-@Singleton
 @Module
 public class CloudModule {
 
     public static final String WEB_SOCKET_URL = "wss://quotes.exness.com:18400";
 
-
     @Provides
-    @Singleton
-    public CloudDataStore provideCloudDataStore(WebSocketCloudDataStore dataStore) {
-        return dataStore;
-    }
-
-    @Singleton
-    @Provides
-    OkHttpClient provideClient() {
+    public OkHttpClient provideClient() {
         return new OkHttpClient();
     }
 
-    @Singleton
     @Provides
-    Request provideRequest() {
+    public Request provideRequest() {
         return new Request.Builder().url(WEB_SOCKET_URL).build();
     }
 
-    @Singleton
     @Provides
-    ObjectMapper provideObjectMapper() {
+    public ObjectMapper provideObjectMapper() {
         return new ObjectMapper();
+    }
+
+    @Provides
+    public DataMapper getDataMapper(ObjectMapper objectMapper) {
+        return new DataMapper(objectMapper);
+    }
+
+    @Provides
+    public RxWebSocket provideRxWebSocket(OkHttpClient client, Request request) {
+
+        return new RxWebSocket(client, request);
+    }
+
+    @Provides
+    public CloudDataStore provideCloudDataStore(DataMapper dataMapper, RxWebSocket rxWebSocket) {
+        return new WebSocketCloudDataStore(dataMapper, rxWebSocket);
     }
 
 }

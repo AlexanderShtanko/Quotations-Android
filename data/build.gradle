@@ -53,6 +53,7 @@ dependencies {
 
     compile dataDependencies.rxJava
     compile dataDependencies.dagger
+    annotationProcessor dataDependencies.daggerCompiler
     compile dataDependencies.okHttp
     compile dataDependencies.jacksonCore
     compile dataDependencies.jacksonAnnotations

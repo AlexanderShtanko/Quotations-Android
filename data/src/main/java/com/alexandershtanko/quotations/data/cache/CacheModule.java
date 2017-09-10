@@ -5,7 +5,8 @@ import android.content.Context;
 import com.alexandershtanko.quotations.data.repository.datasource.CacheDataStore;
 import com.alexandershtanko.quotations.data.utils.paper.RxPaper;
 
-import javax.inject.Singleton;
+import java.util.Arrays;
+import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
@@ -15,20 +16,23 @@ import dagger.Provides;
  *         Created on 07/09/2017.
  *         Copyright Ostrovok.ru
  */
-@Singleton
 @Module
 public class CacheModule {
+    List<String> instruments= Arrays.asList("USD");
+
     @Provides
-    @Singleton
-    public CacheDataStore provideCacheDataStore(PaperCacheDataStore dataStore) {
-        return dataStore;
-    }
-    @Provides
-    @Singleton
-    RxPaper provideRxPaper(Context context) {
+    public RxPaper provideRxPaper(Context context) {
         RxPaper rxPaper = new RxPaper();
         rxPaper.init(context);
         return rxPaper;
     }
+
+    @Provides
+    public CacheDataStore provideCacheDataStore(RxPaper paper)
+    {
+        return new PaperCacheDataStore(paper,instruments);
+    }
+
+
 
 }

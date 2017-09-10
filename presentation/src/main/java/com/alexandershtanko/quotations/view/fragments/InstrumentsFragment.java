@@ -1,5 +1,6 @@
 package com.alexandershtanko.quotations.view.fragments;
 
+import com.alexandershtanko.quotations.App;
 import com.alexandershtanko.quotations.R;
 import com.alexandershtanko.quotations.utils.mvvm.RxFragment;
 import com.alexandershtanko.quotations.utils.mvvm.RxViewBinder;
@@ -24,6 +25,7 @@ public class InstrumentsFragment extends RxFragment<InstrumentsViewHolder, Instr
     }
     @Override
     public InstrumentsViewModel initViewModel() {
+        App.getFragmentsComponent().inject(this);
         return viewModel;
     }
 

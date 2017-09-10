@@ -1,5 +1,9 @@
 package com.alexandershtanko.quotations.data.repository;
 
+import com.alexandershtanko.quotations.data.cache.CacheModule;
+import com.alexandershtanko.quotations.data.cloud.CloudModule;
+import com.alexandershtanko.quotations.data.repository.datasource.CacheDataStore;
+import com.alexandershtanko.quotations.data.repository.datasource.CloudDataStore;
 import com.alexandershtanko.quotations.domain.repository.QuotationsRepository;
 
 import dagger.Module;
@@ -10,7 +14,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by aleksandr on 07.09.17.
  */
-@Module
+@Module(includes = {CloudModule.class, CacheModule.class})
 public class RepositoryModule {
     @Provides
     public Scheduler getScheduler() {
@@ -18,7 +22,7 @@ public class RepositoryModule {
     }
 
     @Provides
-    public QuotationsRepository provideQuotationRepository(QuotationsDataRepository repository) {
-        return repository;
+    public QuotationsRepository provideQuotationRepository(CloudDataStore cloudDataStore, CacheDataStore cacheDataStore) {
+        return new QuotationsDataRepository(cloudDataStore, cacheDataStore);
     }
 }
