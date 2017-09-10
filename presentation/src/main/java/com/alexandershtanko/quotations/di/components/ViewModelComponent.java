@@ -2,6 +2,7 @@ package com.alexandershtanko.quotations.di.components;
 
 import com.alexandershtanko.quotations.di.modules.ViewModelModule;
 import com.alexandershtanko.quotations.viewmodels.InstrumentsViewModel;
+import com.alexandershtanko.quotations.viewmodels.MainActivityViewModel;
 import com.alexandershtanko.quotations.viewmodels.QuotationsViewModel;
 
 import dagger.Component;
@@ -13,4 +14,5 @@ import dagger.Component;
 public interface ViewModelComponent {
     InstrumentsViewModel provideInstrumentsViewModel();
     QuotationsViewModel provideQuotationsViewModel();
+    MainActivityViewModel provideMainActivityViewModel();
 }

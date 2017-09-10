@@ -7,6 +7,7 @@ import com.alexandershtanko.quotations.domain.interactor.GetQuotationsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetSelectedInstrumentsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.RemoveQuotationUseCase;
 import com.alexandershtanko.quotations.viewmodels.InstrumentsViewModel;
+import com.alexandershtanko.quotations.viewmodels.MainActivityViewModel;
 import com.alexandershtanko.quotations.viewmodels.QuotationsViewModel;
 
 import dagger.Module;
@@ -25,6 +26,12 @@ public class ViewModelModule {
     @Provides
     QuotationsViewModel provideQuotationsViewModel(GetQuotationsUseCase getQuotationsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, RemoveQuotationUseCase removeQuotationUseCase, GetConnectionStateUseCase getConnectionStateUseCase, AddQuotationUseCase addQuotationUseCase) {
         return new QuotationsViewModel(getQuotationsUseCase, getSelectedInstrumentsUseCase, removeQuotationUseCase, getConnectionStateUseCase, addQuotationUseCase);
+    }
+
+    @Provides
+    MainActivityViewModel provideMainActivityViewModel()
+    {
+        return new MainActivityViewModel();
     }
 
 }

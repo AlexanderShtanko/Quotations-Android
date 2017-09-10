@@ -1,5 +1,6 @@
 package com.alexandershtanko.quotations.view.activities;
 
+import com.alexandershtanko.quotations.App;
 import com.alexandershtanko.quotations.R;
 import com.alexandershtanko.quotations.utils.mvvm.RxActivity;
 import com.alexandershtanko.quotations.utils.mvvm.RxViewBinder;
@@ -19,6 +20,7 @@ public class MainActivity extends RxActivity<MainActivityViewHolder, MainActivit
 
     @Override
     public MainActivityViewModel initViewModel() {
+        App.getActivitiesComponent().inject(this);
         return viewModel;
     }
 
