@@ -42,8 +42,8 @@ public class App extends Application {
         dataComponent = buildDataComponent(appComponent);
         useCaseComponent = buildUseCaseComponent(dataComponent);
         viewModelComponent = buildViewModelComponent(useCaseComponent);
-        fragmentsComponent = buildFragmentsComponent(appComponent, useCaseComponent, viewModelComponent);
-        activitiesComponent = buildActivitiesComponent(appComponent, useCaseComponent, viewModelComponent);
+        fragmentsComponent = buildFragmentsComponent(viewModelComponent);
+        activitiesComponent = buildActivitiesComponent(viewModelComponent);
 
     }
 
@@ -75,18 +75,14 @@ public class App extends Application {
                 .build();
     }
 
-    private FragmentsComponent buildFragmentsComponent(AppComponent appComponent, UseCaseComponent useCaseComponent, ViewModelComponent viewModelComponent) {
+    private FragmentsComponent buildFragmentsComponent(ViewModelComponent viewModelComponent) {
         return DaggerFragmentsComponent.builder()
-                .appComponent(appComponent)
-                .useCaseComponent(useCaseComponent)
                 .viewModelComponent(viewModelComponent)
                 .build();
     }
 
-    private ActivitiesComponent buildActivitiesComponent(AppComponent appComponent, UseCaseComponent useCaseComponent, ViewModelComponent viewModelComponent) {
+    private ActivitiesComponent buildActivitiesComponent(ViewModelComponent viewModelComponent) {
         return DaggerActivitiesComponent.builder()
-                .appComponent(appComponent)
-                .useCaseComponent(useCaseComponent)
                 .viewModelComponent(viewModelComponent)
                 .build();
     }

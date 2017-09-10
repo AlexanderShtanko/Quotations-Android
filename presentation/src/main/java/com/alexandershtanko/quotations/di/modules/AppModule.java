@@ -13,7 +13,6 @@ import dagger.Provides;
  *         Copyright Ostrovok.ru
  */
 @Module
-@Singleton
 public class AppModule {
     Context appContext;
     public AppModule(Context appContext)
@@ -22,6 +21,7 @@ public class AppModule {
     }
 
     @Provides
+    @Singleton
     public Context getContext()
     {
         return appContext;

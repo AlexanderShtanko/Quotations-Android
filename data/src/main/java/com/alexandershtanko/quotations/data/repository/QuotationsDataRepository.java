@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 
@@ -49,7 +50,7 @@ public class QuotationsDataRepository implements QuotationsRepository {
         return cloudDataStore.subscribe(params.getNames()).doOnNext(res -> {
             if (res)
                 cacheDataStore.addInstruments(params.getNames());
-        });
+        }).toFlowable(BackpressureStrategy.LATEST).toObservable();
     }
 
     @Override
@@ -57,7 +58,7 @@ public class QuotationsDataRepository implements QuotationsRepository {
         return cloudDataStore.unsubscribe(params.getNames()).doOnNext(res -> {
             if (res)
                 cacheDataStore.removeInstruments(params.getNames());
-        });
+        }).toFlowable(BackpressureStrategy.LATEST).toObservable();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.alexandershtanko.quotations.di.modules;
 
+import com.alexandershtanko.quotations.di.scopes.UseCaseScope;
 import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetConnectionStateUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetInstrumentsUseCase;
@@ -18,31 +19,37 @@ import io.reactivex.Scheduler;
 @Module
 public class UseCaseModule {
     @Provides
+    @UseCaseScope
     AddQuotationUseCase provideAddQuotationUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
         return new AddQuotationUseCase(repository, subscriptionScheduler);
     }
 
     @Provides
+    @UseCaseScope
     GetConnectionStateUseCase provideGetConnectionStateUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
         return new GetConnectionStateUseCase(repository, subscriptionScheduler);
     }
 
     @Provides
+    @UseCaseScope
     GetInstrumentsUseCase provideGetInstrumentsUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
         return new GetInstrumentsUseCase(repository, subscriptionScheduler);
     }
 
     @Provides
+    @UseCaseScope
     GetQuotationsUseCase provideGetQuotationsUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
         return new GetQuotationsUseCase(repository, subscriptionScheduler);
     }
 
     @Provides
+    @UseCaseScope
     GetSelectedInstrumentsUseCase GetSelectedInstrumentsUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
         return new GetSelectedInstrumentsUseCase(repository, subscriptionScheduler);
     }
 
     @Provides
+    @UseCaseScope
     RemoveQuotationUseCase RemoveQuotationUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
         return new RemoveQuotationUseCase(repository, subscriptionScheduler);
     }

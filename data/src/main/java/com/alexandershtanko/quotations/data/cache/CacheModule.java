@@ -2,6 +2,7 @@ package com.alexandershtanko.quotations.data.cache;
 
 import android.content.Context;
 
+import com.alexandershtanko.quotations.data.repository.DataScope;
 import com.alexandershtanko.quotations.data.repository.datasource.CacheDataStore;
 import com.alexandershtanko.quotations.data.utils.paper.RxPaper;
 
@@ -18,9 +19,11 @@ import dagger.Provides;
  */
 @Module
 public class CacheModule {
-    List<String> instruments= Arrays.asList("USD");
+    List<String> instruments= Arrays.asList("EURUSD", "EURGBP", "USDJPY", "GBPUSD", "USDCHF", "USDCAD", "AUDUSD", "EURJPY",
+            "EURCHF");
 
     @Provides
+    @DataScope
     public RxPaper provideRxPaper(Context context) {
         RxPaper rxPaper = new RxPaper();
         rxPaper.init(context);
@@ -28,6 +31,7 @@ public class CacheModule {
     }
 
     @Provides
+    @DataScope
     public CacheDataStore provideCacheDataStore(RxPaper paper)
     {
         return new PaperCacheDataStore(paper,instruments);

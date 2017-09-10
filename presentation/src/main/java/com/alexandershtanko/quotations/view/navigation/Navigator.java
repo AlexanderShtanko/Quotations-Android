@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import com.alexandershtanko.quotations.R;
 import com.alexandershtanko.quotations.data.utils.ErrorUtils;
 import com.alexandershtanko.quotations.view.fragments.HelpFragment;
+import com.alexandershtanko.quotations.view.fragments.InstrumentsFragment;
 import com.alexandershtanko.quotations.view.fragments.QuotationsFragment;
 
 /**
@@ -23,7 +24,7 @@ public class Navigator {
     }
 
     public static void openInstruments(FragmentManager fragmentManager) {
-        addFragment(fragmentManager, new QuotationsFragment(), QuotationsFragment.class.getSimpleName(), true);
+        addFragment(fragmentManager, new InstrumentsFragment(), InstrumentsFragment.class.getSimpleName(), true);
     }
 
     public static void openHelp(FragmentManager fragmentManager) {

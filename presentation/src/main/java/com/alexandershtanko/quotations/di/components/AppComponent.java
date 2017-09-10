@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.alexandershtanko.quotations.di.modules.AppModule;
 
+import javax.inject.Singleton;
+
 import dagger.Component;
 
 /**
@@ -12,6 +14,7 @@ import dagger.Component;
  *         Copyright Ostrovok.ru
  */
 @Component(modules = {AppModule.class})
+@Singleton
 public interface AppComponent {
     Context context();
 }

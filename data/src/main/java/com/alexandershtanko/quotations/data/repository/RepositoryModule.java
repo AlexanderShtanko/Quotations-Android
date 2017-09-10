@@ -16,11 +16,13 @@ import io.reactivex.schedulers.Schedulers;
  */
 @Module(includes = {CloudModule.class, CacheModule.class})
 public class RepositoryModule {
+    @DataScope
     @Provides
     public Scheduler getScheduler() {
         return Schedulers.io();
     }
 
+    @DataScope
     @Provides
     public QuotationsRepository provideQuotationRepository(CloudDataStore cloudDataStore, CacheDataStore cacheDataStore) {
         return new QuotationsDataRepository(cloudDataStore, cacheDataStore);

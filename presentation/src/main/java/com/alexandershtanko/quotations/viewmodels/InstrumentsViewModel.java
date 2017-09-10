@@ -44,12 +44,12 @@ public class InstrumentsViewModel extends RxViewModel {
 
     @Override
     protected void onSubscribe(CompositeDisposable s) {
-        s.add(addInstrumentSubject
+        s.add(addInstrumentSubject.hide()
                 .buffer(500)
                 .flatMap(instruments -> addQuotationUseCase.execute(new AddQuotationUseCase.Params(instruments)))
                 .subscribe(addResultSubject::onNext, ErrorUtils::log));
 
-        s.add(removeInstrumentSubject
+        s.add(removeInstrumentSubject.hide()
                 .buffer(500)
                 .flatMap(instruments -> removeQuotationUseCase.execute(new RemoveQuotationUseCase.Params(instruments)))
                 .subscribe(removeResultSubject::onNext, ErrorUtils::log));
@@ -72,10 +72,10 @@ public class InstrumentsViewModel extends RxViewModel {
     }
 
     public Observable<Boolean> getAddResult() {
-        return addResultSubject;
+        return addResultSubject.hide();
     }
 
     public Observable<Boolean> getRemoveResult() {
-        return removeResultSubject;
+        return removeResultSubject.hide();
     }
 }

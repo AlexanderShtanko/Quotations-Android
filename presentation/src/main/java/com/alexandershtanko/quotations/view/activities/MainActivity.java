@@ -28,4 +28,10 @@ public class MainActivity extends RxActivity<MainActivityViewHolder, MainActivit
     public RxViewBinder<MainActivityViewHolder, MainActivityViewModel> createViewBinder(MainActivityViewHolder viewHolder, MainActivityViewModel viewModel) {
         return new MainActivityViewHolder.ViewBinder(viewHolder, viewModel);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (!getSupportFragmentManager().popBackStackImmediate())
+            super.onBackPressed();
+    }
 }

@@ -26,20 +26,22 @@ ext {
     testingSupportLibVersion = '0.1'
 
     presentationDependencies = [
-            appCompatV7       : "com.android.support:appcompat-v7:${appCompatVersion}",
-            design            : "com.android.support:design:${appCompatVersion}",
-            cardView          : "com.android.support:cardview-v7:${appCompatVersion}",
-            supportAnnotations: "com.android.support:support-annotations:${appCompatVersion}",
-            recyclerView      : "com.android.support:recyclerview-v7:${appCompatVersion}",
-            rxJava            : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
-            butterKnife       : "com.jakewharton:butterknife:${butterKnifeVersion}",
-            rxBinding         : "com.jakewharton.rxbinding2:rxbinding:${rxBindingVersion}",
-            dagger            : "com.google.dagger:dagger:${daggerVersion}",
-            daggerCompiler    : "com.google.dagger:dagger-compiler:${daggerVersion}"
+            appCompatV7        : "com.android.support:appcompat-v7:${appCompatVersion}",
+            design             : "com.android.support:design:${appCompatVersion}",
+            cardView           : "com.android.support:cardview-v7:${appCompatVersion}",
+            supportAnnotations : "com.android.support:support-annotations:${appCompatVersion}",
+            recyclerView       : "com.android.support:recyclerview-v7:${appCompatVersion}",
+            rxJava             : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            butterKnife        : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            butterKnifeCompiler: "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
+
+            rxBinding          : "com.jakewharton.rxbinding2:rxbinding:${rxBindingVersion}",
+            dagger             : "com.google.dagger:dagger:${daggerVersion}",
+            daggerCompiler     : "com.google.dagger:dagger-compiler:${daggerVersion}"
     ]
 
     presentationTestDependencies = [
-            junit      : "junit:junit:${jUnitVersion}",
+            junit            : "junit:junit:${jUnitVersion}",
             mockito          : "org.mockito:mockito-core:${mockitoVersion}",
             dexmaker         : "com.google.dexmaker:dexmaker:${dexmakerVersion}",
             dexmakerMockito  : "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}",
@@ -48,9 +50,9 @@ ext {
     ]
 
     domainDependencies = [
-            rxJava: "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
-            dagger: "com.google.dagger:dagger:${daggerVersion}",
-            daggerCompiler    : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            rxJava        : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            dagger        : "com.google.dagger:dagger:${daggerVersion}",
+            daggerCompiler: "com.google.dagger:dagger-compiler:${daggerVersion}",
     ]
 
     domainTestDependencies = [

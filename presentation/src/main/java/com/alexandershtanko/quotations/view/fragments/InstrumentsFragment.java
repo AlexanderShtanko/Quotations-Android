@@ -31,6 +31,8 @@ public class InstrumentsFragment extends RxFragment<InstrumentsViewHolder, Instr
 
     @Override
     public RxViewBinder<InstrumentsViewHolder, InstrumentsViewModel> createViewBinder(InstrumentsViewHolder viewHolder, InstrumentsViewModel viewModel) {
-        return new InstrumentsViewHolder.ViewBinder(viewHolder, viewModel);
+        return new InstrumentsViewHolder.ViewBinder(getFragmentManager(),viewHolder, viewModel);
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.alexandershtanko.quotations.view;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.alexandershtanko.quotations.data.utils.ErrorUtils;
 import com.alexandershtanko.quotations.utils.mvvm.RxViewBinder;
 import com.alexandershtanko.quotations.utils.mvvm.RxViewHolder;
 import com.alexandershtanko.quotations.viewmodels.InstrumentsViewModel;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +33,8 @@ public class InstrumentsViewHolder extends RxViewHolder {
 
     @BindView(R.id.layout_instruments)
     ViewGroup instrumentsLayout;
+    @BindView(R.id.button_back)
+    View backButton;
 
     public InstrumentsViewHolder(Context context, int layoutRes) {
         super(context, layoutRes);
@@ -41,8 +45,11 @@ public class InstrumentsViewHolder extends RxViewHolder {
     }
 
     public static class ViewBinder extends RxViewBinder<InstrumentsViewHolder, InstrumentsViewModel> {
-        public ViewBinder(InstrumentsViewHolder viewHolder, InstrumentsViewModel viewModel) {
+        private final FragmentManager fragmentManager;
+
+        public ViewBinder(FragmentManager fragmentManager, InstrumentsViewHolder viewHolder, InstrumentsViewModel viewModel) {
             super(viewHolder, viewModel);
+            this.fragmentManager = fragmentManager;
         }
 
         @Override
@@ -66,25 +73,30 @@ public class InstrumentsViewHolder extends RxViewHolder {
                     .subscribe(res -> {
                         Toast.makeText(viewHolder.getContext(), res ? R.string.remove_ok : R.string.remove_failed, Toast.LENGTH_SHORT).show();
                     }, ErrorUtils::log));
+
+            s.add(RxView.clicks(viewHolder.backButton).subscribe(v -> goBack(), ErrorUtils::log));
+        }
+
+        public boolean goBack() {
+            return fragmentManager.popBackStackImmediate();
         }
 
         private void populate(Pair<List<String>, List<String>> pair) {
             List<String> instruments = pair.first;
             List<String> selected = pair.second;
-
+            viewHolder.instrumentsLayout.removeAllViews();
             for (String instrument : instruments) {
                 CheckBox checkBox = (CheckBox) LayoutInflater.from(viewHolder.getContext()).inflate(R.layout.item_instrument, viewHolder.instrumentsLayout, false);
                 checkBox.setText(instrument);
                 checkBox.setChecked(selected.contains(instrument));
-                checkBox.setOnClickListener(view -> {
-                    boolean isChecked = checkBox.isChecked();
+                checkBox.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                     if (isChecked)
                         viewModel.addInstrument(instrument);
                     else
                         viewModel.removeInstrument(instrument);
-
-
                 });
+
+                viewHolder.instrumentsLayout.addView(checkBox);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.alexandershtanko.quotations.di.modules;
 
+import com.alexandershtanko.quotations.di.scopes.ViewModelScope;
 import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetConnectionStateUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetInstrumentsUseCase;
@@ -18,16 +19,20 @@ import dagger.Provides;
  */
 @Module
 public class ViewModelModule {
+
+    @ViewModelScope
     @Provides
     InstrumentsViewModel provideInstrumentsViewModel(GetInstrumentsUseCase getInstrumentsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, AddQuotationUseCase addQuotationUseCase, RemoveQuotationUseCase removeQuotationUseCase) {
         return new InstrumentsViewModel(getInstrumentsUseCase, getSelectedInstrumentsUseCase, addQuotationUseCase, removeQuotationUseCase);
     }
 
+    @ViewModelScope
     @Provides
     QuotationsViewModel provideQuotationsViewModel(GetQuotationsUseCase getQuotationsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, RemoveQuotationUseCase removeQuotationUseCase, GetConnectionStateUseCase getConnectionStateUseCase, AddQuotationUseCase addQuotationUseCase) {
         return new QuotationsViewModel(getQuotationsUseCase, getSelectedInstrumentsUseCase, removeQuotationUseCase, getConnectionStateUseCase, addQuotationUseCase);
     }
 
+    @ViewModelScope
     @Provides
     MainActivityViewModel provideMainActivityViewModel()
     {

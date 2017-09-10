@@ -68,8 +68,10 @@ public class PaperCacheDataStore implements CacheDataStore {
 
     @Override
     public Observable<List<String>> getSelectedInstruments() {
-        Observable<RxPaper.PaperObject<List<String>>> observable = rxPaper.read(BOOK_MAIN, KEY_INSTRUMENTS);
+        if(!rxPaper.exist(BOOK_MAIN,KEY_INSTRUMENTS))
+            rxPaper.write(BOOK_MAIN,KEY_INSTRUMENTS,instruments);
 
+        Observable<RxPaper.PaperObject<List<String>>> observable = rxPaper.read(BOOK_MAIN, KEY_INSTRUMENTS);
         return observable.map(objectPaperObject -> {
             if (objectPaperObject != null && objectPaperObject.getObject() != null)
                 return objectPaperObject.getObject();
