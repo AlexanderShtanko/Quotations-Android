@@ -1,11 +1,11 @@
 package com.alexandershtanko.quotations.viewmodels;
 
 import com.alexandershtanko.quotations.data.utils.ErrorUtils;
-import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
+import com.alexandershtanko.quotations.domain.interactor.SubscribeUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetConnectionStateUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetQuotationsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetSelectedInstrumentsUseCase;
-import com.alexandershtanko.quotations.domain.interactor.RemoveQuotationUseCase;
+import com.alexandershtanko.quotations.domain.interactor.UnsubscribeUseCase;
 import com.alexandershtanko.quotations.domain.models.Quotation;
 import com.alexandershtanko.quotations.utils.mvvm.RxViewModel;
 
@@ -25,18 +25,18 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class QuotationsViewModel extends RxViewModel {
     private final GetQuotationsUseCase getQuotationUseCase;
-    private final RemoveQuotationUseCase removeQuotationUseCase;
+    private final UnsubscribeUseCase unsubscribeUseCase;
     private final GetConnectionStateUseCase getConnectionStateUseCase;
     private final GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase;
-    private final AddQuotationUseCase addQuotationUseCase;
+    private final SubscribeUseCase subscribeUseCase;
 
     @Inject
-    public QuotationsViewModel(GetQuotationsUseCase getQuotationsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, RemoveQuotationUseCase removeQuotationUseCase, GetConnectionStateUseCase getConnectionStateUseCase, AddQuotationUseCase addQuotationUseCase) {
+    public QuotationsViewModel(GetQuotationsUseCase getQuotationsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, UnsubscribeUseCase unsubscribeUseCase, GetConnectionStateUseCase getConnectionStateUseCase, SubscribeUseCase subscribeUseCase) {
         this.getQuotationUseCase = getQuotationsUseCase;
-        this.removeQuotationUseCase = removeQuotationUseCase;
+        this.unsubscribeUseCase = unsubscribeUseCase;
         this.getConnectionStateUseCase = getConnectionStateUseCase;
         this.getSelectedInstrumentsUseCase = getSelectedInstrumentsUseCase;
-        this.addQuotationUseCase = addQuotationUseCase;
+        this.subscribeUseCase = subscribeUseCase;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class QuotationsViewModel extends RxViewModel {
         s.add(getConnectionState()
                 .filter(state -> state)
                 .switchMap(state -> getSelectedInstrumentsUseCase.execute().firstElement().toObservable())
-                .switchMap(instruments -> addQuotationUseCase.execute(new AddQuotationUseCase.Params(instruments)))
+                .switchMap(instruments -> subscribeUseCase.execute(new SubscribeUseCase.Params(instruments)))
                 .subscribe(state -> {
                 }, ErrorUtils::log));
     }
@@ -54,7 +54,7 @@ public class QuotationsViewModel extends RxViewModel {
     }
 
     public Observable<Boolean> removeQuotation(String symbol) {
-        return removeQuotationUseCase.execute(new RemoveQuotationUseCase.Params(Arrays.asList(symbol)));
+        return unsubscribeUseCase.execute(new UnsubscribeUseCase.Params(Arrays.asList(symbol)));
     }
 
     public Observable<Boolean> getConnectionState() {

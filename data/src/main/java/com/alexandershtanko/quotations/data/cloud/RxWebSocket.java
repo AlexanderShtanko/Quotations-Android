@@ -26,7 +26,7 @@ public class RxWebSocket {
 
     private final OkHttpClient okHttpClient;
     private final Request request;
-    private WebSocket EMPTY_WEB_SOCKET=new WebSocket() {
+    private WebSocket EMPTY_WEB_SOCKET = new WebSocket() {
         @Override
         public Request request() {
             return null;
@@ -63,6 +63,7 @@ public class RxWebSocket {
     private PublishSubject<OnFailureEvent> onFailureSubject = PublishSubject.create();
 
     private WebSocketListener webSocketListener = new RxWebSocketListener();
+    private volatile boolean flgDoNotReconnect;
 
     @Inject
     public RxWebSocket(OkHttpClient okHttpClient, Request request) {
@@ -80,7 +81,7 @@ public class RxWebSocket {
     }
 
     public Observable<String> getMessagesObservable() {
-        return getOrCreateWebSocket().switchMap(ws -> onMessageSubject.hide());
+        return getOrCreateWebSocket().flatMap(ws -> onMessageSubject.hide());
     }
 
     private Observable<WebSocket> getWebSocket() {
@@ -89,10 +90,10 @@ public class RxWebSocket {
 
     private Observable<WebSocket> getOrCreateWebSocket() {
         return getWebSocket().throttleLast(500, TimeUnit.MILLISECONDS).map(ws -> {
-            if (ws == EMPTY_WEB_SOCKET)
+            if (ws == EMPTY_WEB_SOCKET && !flgDoNotReconnect)
                 return createWebSocket();
             else return ws;
-        }).doOnTerminate(this::closeWebSocket);
+        }).doOnSubscribe(disposable -> flgDoNotReconnect = false).doOnTerminate(this::closeWebSocket);
     }
 
     private Observable<WebSocket> onConnected() {
@@ -114,6 +115,7 @@ public class RxWebSocket {
 
     private synchronized void closeWebSocket() {
         try {
+            flgDoNotReconnect = true;
             WebSocket ws = webSocketSubject.getValue();
             if (ws != EMPTY_WEB_SOCKET) {
                 ws.cancel();

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.alexandershtanko.quotations.R;
 import com.alexandershtanko.quotations.domain.models.Quotation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -36,11 +37,18 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
 
     public void setSortType(SortType sortType) {
         this.sortType = sortType;
-        notifyDataSetChanged();
+        List<Quotation> list = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            list.add(items.get(i));
+        }
+        items.beginBatchedUpdates();
+        items.clear();
+        items.addAll(list);
+        items.endBatchedUpdates();
     }
 
     public QuotationsAdapter() {
-        items = new SortedList<>(Quotation.class, new SortedList.Callback<Quotation>() {
+        items = new SortedList<>(Quotation.class, new SortedList.BatchedCallback<>(new SortedList.Callback<Quotation>() {
             @Override
             public int compare(Quotation o1, Quotation o2) {
                 switch (sortType) {
@@ -49,7 +57,7 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
                     case BID:
                         return Float.compare(Float.parseFloat(o1.getBid()), Float.parseFloat(o2.getBid()));
                     case SPREAD:
-                        return Float.compare(Float.parseFloat(o1.getSpread()), Float.parseFloat(o2.getSymbol()));
+                        return Float.compare(Float.parseFloat(o1.getSpread()), Float.parseFloat(o2.getSpread()));
                 }
                 return 0;
             }
@@ -87,11 +95,34 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
             public void onMoved(int fromPosition, int toPosition) {
                 notifyItemMoved(fromPosition, toPosition);
             }
-        });
+        }));
     }
 
     public void setQuotations(List<Quotation> quotations) {
-        items.addAll(quotations);
+        items.beginBatchedUpdates();
+        for (Quotation quotation : quotations) {
+            items.add(quotation);
+        }
+        List<Quotation> toRemove = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            boolean flgFound = false;
+            for (Quotation quotation : quotations) {
+                if (items.get(i).getSymbol().equals(quotation.getSymbol())) {
+                    items.add(quotation);
+                    flgFound = true;
+                    break;
+                }
+            }
+            if (!flgFound) {
+                toRemove.add(items.get(i));
+            }
+        }
+
+        for (Quotation quotation : toRemove) {
+            items.remove(quotation);
+        }
+
+        items.endBatchedUpdates();
     }
 
     @Override
@@ -129,7 +160,7 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
             removeButton.setOnClickListener(v -> onRemoveSubject.onNext(quotation.getSymbol()));
             symbol.setText(quotation.getSymbol());
             bidAsk.setText(quotation.getBid() + " / " + quotation.getAsk());
-            spread.setText(quotation.getSymbol());
+            spread.setText(quotation.getSpread());
         }
     }
 }

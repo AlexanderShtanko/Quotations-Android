@@ -6,6 +6,7 @@ import com.alexandershtanko.quotations.data.repository.DataScope;
 import com.alexandershtanko.quotations.data.repository.datasource.CacheDataStore;
 import com.alexandershtanko.quotations.data.utils.paper.RxPaper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,8 +20,8 @@ import dagger.Provides;
  */
 @Module
 public class CacheModule {
-    List<String> instruments= Arrays.asList("EURUSD", "EURGBP", "USDJPY", "GBPUSD", "USDCHF", "USDCAD", "AUDUSD", "EURJPY",
-            "EURCHF");
+    List<String> instruments= new ArrayList<>(Arrays.asList("EURUSD", "EURGBP", "USDJPY", "GBPUSD", "USDCHF", "USDCAD", "AUDUSD", "EURJPY",
+            "EURCHF"));
 
     @Provides
     @DataScope

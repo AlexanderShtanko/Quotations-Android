@@ -1,12 +1,13 @@
 package com.alexandershtanko.quotations.viewmodels;
 
 import com.alexandershtanko.quotations.data.utils.ErrorUtils;
-import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetInstrumentsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetSelectedInstrumentsUseCase;
-import com.alexandershtanko.quotations.domain.interactor.RemoveQuotationUseCase;
+import com.alexandershtanko.quotations.domain.interactor.SubscribeUseCase;
+import com.alexandershtanko.quotations.domain.interactor.UnsubscribeUseCase;
 import com.alexandershtanko.quotations.utils.mvvm.RxViewModel;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,8 +26,8 @@ public class InstrumentsViewModel extends RxViewModel {
 
     private final GetInstrumentsUseCase getInstrumentsUseCase;
     private final GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase;
-    private final AddQuotationUseCase addQuotationUseCase;
-    private final RemoveQuotationUseCase removeQuotationUseCase;
+    private final SubscribeUseCase subscribeUseCase;
+    private final UnsubscribeUseCase unsubscribeUseCase;
     private PublishSubject<String> addInstrumentSubject = PublishSubject.create();
     private PublishSubject<String> removeInstrumentSubject = PublishSubject.create();
 
@@ -35,23 +36,21 @@ public class InstrumentsViewModel extends RxViewModel {
 
 
     @Inject
-    public InstrumentsViewModel(GetInstrumentsUseCase getInstrumentsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, AddQuotationUseCase addQuotationUseCase, RemoveQuotationUseCase removeQuotationUseCase) {
+    public InstrumentsViewModel(GetInstrumentsUseCase getInstrumentsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, SubscribeUseCase subscribeUseCase, UnsubscribeUseCase unsubscribeUseCase) {
         this.getInstrumentsUseCase = getInstrumentsUseCase;
         this.getSelectedInstrumentsUseCase = getSelectedInstrumentsUseCase;
-        this.addQuotationUseCase = addQuotationUseCase;
-        this.removeQuotationUseCase = removeQuotationUseCase;
+        this.subscribeUseCase = subscribeUseCase;
+        this.unsubscribeUseCase = unsubscribeUseCase;
     }
 
     @Override
     protected void onSubscribe(CompositeDisposable s) {
         s.add(addInstrumentSubject.hide()
-                .buffer(500)
-                .flatMap(instruments -> addQuotationUseCase.execute(new AddQuotationUseCase.Params(instruments)))
+                .flatMap(instrument -> subscribeUseCase.execute(new SubscribeUseCase.Params(Collections.singletonList(instrument))))
                 .subscribe(addResultSubject::onNext, ErrorUtils::log));
 
         s.add(removeInstrumentSubject.hide()
-                .buffer(500)
-                .flatMap(instruments -> removeQuotationUseCase.execute(new RemoveQuotationUseCase.Params(instruments)))
+                .flatMap(instrument -> unsubscribeUseCase.execute(new UnsubscribeUseCase.Params(Collections.singletonList(instrument))))
                 .subscribe(removeResultSubject::onNext, ErrorUtils::log));
     }
 

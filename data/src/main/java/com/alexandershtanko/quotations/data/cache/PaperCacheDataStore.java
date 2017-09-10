@@ -25,9 +25,9 @@ public class PaperCacheDataStore implements CacheDataStore {
     private final List<String> instruments;
 
     @Inject
-    public PaperCacheDataStore(RxPaper rxPaper,List<String> instruments) {
+    public PaperCacheDataStore(RxPaper rxPaper, List<String> instruments) {
         this.rxPaper = rxPaper;
-        this.instruments=instruments;
+        this.instruments = instruments;
     }
 
     @Override
@@ -44,21 +44,30 @@ public class PaperCacheDataStore implements CacheDataStore {
     }
 
     @Override
-    public void addInstruments(List<String> names) {
-        rxPaper.write(BOOK_MAIN, KEY_INSTRUMENTS, names);
+    public synchronized void addInstruments(List<String> names) {
+        List<String> list = getSelectedInstrumentsOnce();
+        if (names != null) {
+            for (String name : names) {
+                if (!list.contains(name))
+                    list.add(name);
+            }
+        }
+        rxPaper.write(BOOK_MAIN, KEY_INSTRUMENTS, list);
     }
 
     @Override
-    public void removeInstruments(List<String> names) {
-        List<String> instruments = getInstrumentsOnce();
-        for (String name : names) {
-            instruments.remove(name);
-        }
+    public synchronized void removeInstruments(List<String> names) {
+        List<String> instruments = getSelectedInstrumentsOnce();
+        if (names != null)
+            for (String name : names) {
+                if (instruments.contains(name))
+                    instruments.remove(name);
+            }
 
         rxPaper.write(BOOK_MAIN, KEY_INSTRUMENTS, instruments);
     }
 
-    private List<String> getInstrumentsOnce() {
+    private List<String> getSelectedInstrumentsOnce() {
         List<String> instruments = new ArrayList<>();
         RxPaper.PaperObject<List<String>> obj = rxPaper.readOnce(BOOK_MAIN, KEY_INSTRUMENTS);
         if (obj != null)
@@ -68,8 +77,8 @@ public class PaperCacheDataStore implements CacheDataStore {
 
     @Override
     public Observable<List<String>> getSelectedInstruments() {
-        if(!rxPaper.exist(BOOK_MAIN,KEY_INSTRUMENTS))
-            rxPaper.write(BOOK_MAIN,KEY_INSTRUMENTS,instruments);
+        if (!rxPaper.exist(BOOK_MAIN, KEY_INSTRUMENTS))
+            rxPaper.write(BOOK_MAIN, KEY_INSTRUMENTS, instruments);
 
         Observable<RxPaper.PaperObject<List<String>>> observable = rxPaper.read(BOOK_MAIN, KEY_INSTRUMENTS);
         return observable.map(objectPaperObject -> {

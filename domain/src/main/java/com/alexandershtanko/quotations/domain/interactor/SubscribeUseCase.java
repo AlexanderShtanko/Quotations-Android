@@ -15,18 +15,18 @@ import io.reactivex.Scheduler;
  *         Copyright Ostrovok.ru
  */
 
-public class RemoveQuotationUseCase extends UseCase<Boolean, RemoveQuotationUseCase.Params> {
+public class SubscribeUseCase extends UseCase<Boolean, SubscribeUseCase.Params> {
     private final QuotationsRepository repository;
 
     @Inject
-    public RemoveQuotationUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
+    public SubscribeUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
         super(subscriptionScheduler);
         this.repository = repository;
     }
 
     @Override
     Observable<Boolean> buildUseCaseObservable(Params params) {
-        return repository.removeInstruments(params);
+        return repository.addInstruments(params);
     }
 
     public static class Params {

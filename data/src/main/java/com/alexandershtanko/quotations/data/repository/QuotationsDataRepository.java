@@ -3,8 +3,8 @@ package com.alexandershtanko.quotations.data.repository;
 import com.alexandershtanko.quotations.data.mappers.QuotationEntityDataMapper;
 import com.alexandershtanko.quotations.data.repository.datasource.CacheDataStore;
 import com.alexandershtanko.quotations.data.repository.datasource.CloudDataStore;
-import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
-import com.alexandershtanko.quotations.domain.interactor.RemoveQuotationUseCase;
+import com.alexandershtanko.quotations.domain.interactor.SubscribeUseCase;
+import com.alexandershtanko.quotations.domain.interactor.UnsubscribeUseCase;
 import com.alexandershtanko.quotations.domain.models.Quotation;
 import com.alexandershtanko.quotations.domain.repository.QuotationsRepository;
 
@@ -45,7 +45,7 @@ public class QuotationsDataRepository implements QuotationsRepository {
     }
 
     @Override
-    public Observable<Boolean> addInstruments(AddQuotationUseCase.Params params) {
+    public Observable<Boolean> addInstruments(SubscribeUseCase.Params params) {
 
         return cloudDataStore.subscribe(params.getNames()).doOnNext(res -> {
             if (res)
@@ -54,7 +54,7 @@ public class QuotationsDataRepository implements QuotationsRepository {
     }
 
     @Override
-    public Observable<Boolean> removeInstruments(RemoveQuotationUseCase.Params params) {
+    public Observable<Boolean> removeInstruments(UnsubscribeUseCase.Params params) {
         return cloudDataStore.unsubscribe(params.getNames()).doOnNext(res -> {
             if (res)
                 cacheDataStore.removeInstruments(params.getNames());

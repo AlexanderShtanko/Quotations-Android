@@ -4,6 +4,7 @@ import com.alexandershtanko.quotations.data.mappers.DataMapper;
 import com.alexandershtanko.quotations.data.repository.DataScope;
 import com.alexandershtanko.quotations.data.repository.datasource.CloudDataStore;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +28,8 @@ public class CloudModule {
     public OkHttpClient provideClient() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(0,TimeUnit.NANOSECONDS)
+                .connectTimeout(0,TimeUnit.NANOSECONDS)
+                .writeTimeout(0,TimeUnit.NANOSECONDS)
                 .build();
         return okHttpClient;
     }
@@ -40,7 +43,9 @@ public class CloudModule {
     @Provides
     @DataScope
     public ObjectMapper provideObjectMapper() {
-        return new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+        return objectMapper;
     }
 
     @Provides

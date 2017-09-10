@@ -1,12 +1,12 @@
 package com.alexandershtanko.quotations.di.modules;
 
 import com.alexandershtanko.quotations.di.scopes.UseCaseScope;
-import com.alexandershtanko.quotations.domain.interactor.AddQuotationUseCase;
+import com.alexandershtanko.quotations.domain.interactor.SubscribeUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetConnectionStateUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetInstrumentsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetQuotationsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetSelectedInstrumentsUseCase;
-import com.alexandershtanko.quotations.domain.interactor.RemoveQuotationUseCase;
+import com.alexandershtanko.quotations.domain.interactor.UnsubscribeUseCase;
 import com.alexandershtanko.quotations.domain.repository.QuotationsRepository;
 
 import dagger.Module;
@@ -20,8 +20,8 @@ import io.reactivex.Scheduler;
 public class UseCaseModule {
     @Provides
     @UseCaseScope
-    AddQuotationUseCase provideAddQuotationUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
-        return new AddQuotationUseCase(repository, subscriptionScheduler);
+    SubscribeUseCase provideAddQuotationUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
+        return new SubscribeUseCase(repository, subscriptionScheduler);
     }
 
     @Provides
@@ -50,8 +50,8 @@ public class UseCaseModule {
 
     @Provides
     @UseCaseScope
-    RemoveQuotationUseCase RemoveQuotationUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
-        return new RemoveQuotationUseCase(repository, subscriptionScheduler);
+    UnsubscribeUseCase RemoveQuotationUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
+        return new UnsubscribeUseCase(repository, subscriptionScheduler);
     }
 
 }
