@@ -31,7 +31,7 @@ public class MainActivity extends RxActivity<MainActivityViewHolder, MainActivit
 
     @Override
     public void onBackPressed() {
-        if (!getSupportFragmentManager().popBackStackImmediate())
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1 || !getSupportFragmentManager().popBackStackImmediate())
             super.onBackPressed();
     }
 }
