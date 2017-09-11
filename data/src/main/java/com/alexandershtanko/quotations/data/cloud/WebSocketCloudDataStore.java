@@ -1,7 +1,7 @@
 package com.alexandershtanko.quotations.data.cloud;
 
 import com.alexandershtanko.quotations.data.mappers.DataMapper;
-import com.alexandershtanko.quotations.data.models.QuotationsResponseEntity;
+import com.alexandershtanko.quotations.data.models.QuotationsListEntity;
 import com.alexandershtanko.quotations.data.repository.datasource.CloudDataStore;
 
 import java.util.List;
@@ -11,9 +11,9 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 07/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 
 public class WebSocketCloudDataStore implements CloudDataStore {
@@ -28,7 +28,7 @@ public class WebSocketCloudDataStore implements CloudDataStore {
     }
 
     @Override
-    public Observable<QuotationsResponseEntity> getQuotations() {
+    public Observable<QuotationsListEntity> getQuotations() {
         return rxWebSocket.getMessagesObservable().map(dataMapper::getQuotations).filter(l -> l != null);
     }
 

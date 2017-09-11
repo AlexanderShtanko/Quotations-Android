@@ -12,9 +12,9 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 07/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 
 public class PaperCacheDataStore implements CacheDataStore {
@@ -36,10 +36,44 @@ public class PaperCacheDataStore implements CacheDataStore {
     }
 
     @Override
+    public List<Quotation> addQuotations(List<Quotation> quotations) {
+        List<String> selectedInstruments = getSelectedInstrumentsOnce();
+        List<Quotation> oldQuotations = getQuotations();
+        for (Quotation quotation : quotations) {
+            if (selectedInstruments.contains(quotation.getSymbol())) {
+                boolean found = false;
+                for (int i = 0; i < oldQuotations.size(); i++) {
+                    Quotation oldQuotation = oldQuotations.get(i);
+                    if (oldQuotation.getSymbol().equals(quotation.getSymbol())) {
+                        oldQuotations.set(i, quotation);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                    oldQuotations.add(quotation);
+            }
+        }
+        setQuotations(oldQuotations);
+        return oldQuotations;
+    }
+
+    @Override
     public List<Quotation> getQuotations() {
         RxPaper.PaperObject<List<Quotation>> obj = rxPaper.readOnce(BOOK_MAIN, KEY_QUOTATIONS);
-        if (obj != null)
-            return obj.getObject();
+        if (obj != null) {
+            List<Quotation> quotations = obj.getObject();
+            List<Quotation> list=new ArrayList<>();
+            List<String> selectedInstruments = getSelectedInstrumentsOnce();
+            for(Quotation quotation:quotations)
+            {
+                if(selectedInstruments.contains(quotation.getSymbol()))
+                {
+                    list.add(quotation);
+                }
+            }
+            return list;
+        }
         return new ArrayList<>();
     }
 
@@ -58,13 +92,26 @@ public class PaperCacheDataStore implements CacheDataStore {
     @Override
     public synchronized void removeInstruments(List<String> names) {
         List<String> instruments = getSelectedInstrumentsOnce();
+        List<Quotation> quotations = getQuotations();
+        List<Quotation> needToRemove = new ArrayList<>();
         if (names != null)
             for (String name : names) {
                 if (instruments.contains(name))
                     instruments.remove(name);
+
+                for (Quotation quotation : quotations) {
+                    if (quotation.getSymbol().equals(name)) {
+                        needToRemove.add(quotation);
+                    }
+                }
             }
 
+        for (Quotation quotation : needToRemove) {
+            quotations.remove(quotation);
+        }
+
         rxPaper.write(BOOK_MAIN, KEY_INSTRUMENTS, instruments);
+        setQuotations(quotations);
     }
 
     private List<String> getSelectedInstrumentsOnce() {

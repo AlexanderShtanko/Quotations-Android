@@ -1,5 +1,6 @@
 package com.alexandershtanko.quotations.data.mappers;
 
+import com.alexandershtanko.quotations.data.models.QuotationsListEntity;
 import com.alexandershtanko.quotations.data.models.QuotationsResponseEntity;
 import com.alexandershtanko.quotations.data.utils.ErrorUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,9 +13,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 07/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 
 public class DataMapper {
@@ -33,12 +34,17 @@ public class DataMapper {
         return "UNSUBSCRIBE: " + StringUtils.join(instruments, ',');
     }
 
-    public QuotationsResponseEntity getQuotations(String message) {
+    public QuotationsListEntity getQuotations(String message) {
         try {
-            return objectMapper.readValue(message, QuotationsResponseEntity.class);
+            return objectMapper.readValue(message, QuotationsListEntity.class);
         } catch (IOException e) {
-            ErrorUtils.log(e);
-            return null;
+            try {
+                QuotationsResponseEntity response = objectMapper.readValue(message, QuotationsResponseEntity.class);
+                return response.getSubscribedList();
+            } catch (IOException e1) {
+                ErrorUtils.log(e);
+                return null;
+            }
         }
     }
 }

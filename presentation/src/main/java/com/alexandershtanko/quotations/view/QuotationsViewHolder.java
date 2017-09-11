@@ -27,9 +27,9 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 08/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 
 public class QuotationsViewHolder extends RxViewHolder {
@@ -69,11 +69,11 @@ public class QuotationsViewHolder extends RxViewHolder {
 
         @Override
         protected void onBind(CompositeDisposable s) {
-            s.add(RxView.clicks(viewHolder.instrumentsButton).subscribe(v -> Navigator.openInstruments(fragmentManager), ErrorUtils::log));
-            s.add(RxView.clicks(viewHolder.helpButton).subscribe(v -> Navigator.openHelp(fragmentManager), ErrorUtils::log));
-            s.add(RxView.clicks(viewHolder.symbol).subscribe(v -> viewHolder.quotationsAdapter.setSortType(QuotationsAdapter.SortType.SYMBOL), ErrorUtils::log));
-            s.add(RxView.clicks(viewHolder.bidAsk).subscribe(v -> viewHolder.quotationsAdapter.setSortType(QuotationsAdapter.SortType.BID), ErrorUtils::log));
-            s.add(RxView.clicks(viewHolder.spread).subscribe(v -> viewHolder.quotationsAdapter.setSortType(QuotationsAdapter.SortType.SPREAD), ErrorUtils::log));
+            s.add(RxView.clicks(viewHolder.instrumentsButton).throttleFirst(500,TimeUnit.MILLISECONDS).subscribe(v -> Navigator.openInstruments(fragmentManager), ErrorUtils::log));
+            s.add(RxView.clicks(viewHolder.helpButton).throttleFirst(500,TimeUnit.MILLISECONDS).subscribe(v -> Navigator.openHelp(fragmentManager), ErrorUtils::log));
+            s.add(RxView.clicks(viewHolder.symbol).throttleFirst(500,TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(v -> viewHolder.quotationsAdapter.setSortType(QuotationsAdapter.SortType.SYMBOL), ErrorUtils::log));
+            s.add(RxView.clicks(viewHolder.bidAsk).throttleFirst(500,TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(v -> viewHolder.quotationsAdapter.setSortType(QuotationsAdapter.SortType.BID), ErrorUtils::log));
+            s.add(RxView.clicks(viewHolder.spread).throttleFirst(500,TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(v -> viewHolder.quotationsAdapter.setSortType(QuotationsAdapter.SortType.SPREAD), ErrorUtils::log));
 
             s.add(viewHolder.quotationsAdapter.getOnRemoveObservable()
                     .observeOn(Schedulers.io())
@@ -83,8 +83,8 @@ public class QuotationsViewHolder extends RxViewHolder {
                         Toast.makeText(viewHolder.getContext(), res ? R.string.remove_ok : R.string.remove_failed, Toast.LENGTH_LONG).show();
                     }, ErrorUtils::log));
 
-            s.add(viewModel.getQuotations().throttleLast(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setQuotations, ErrorUtils::log));
-            s.add(viewModel.getConnectionState().throttleLast(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setConnectionState, ErrorUtils::log));
+            s.add(viewModel.getQuotations().throttleLast(500, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setQuotations, ErrorUtils::log));
+            s.add(viewModel.getConnectionState().throttleLast(500, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setConnectionState, ErrorUtils::log));
         }
     }
 

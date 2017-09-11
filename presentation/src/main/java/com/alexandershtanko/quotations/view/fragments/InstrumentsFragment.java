@@ -10,9 +10,9 @@ import com.alexandershtanko.quotations.viewmodels.InstrumentsViewModel;
 import javax.inject.Inject;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 08/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 
 public class InstrumentsFragment extends RxFragment<InstrumentsViewHolder, InstrumentsViewModel> {

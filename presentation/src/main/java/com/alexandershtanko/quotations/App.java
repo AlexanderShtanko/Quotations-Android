@@ -20,11 +20,13 @@ import com.alexandershtanko.quotations.di.components.ViewModelComponent;
 import com.alexandershtanko.quotations.di.modules.AppModule;
 import com.alexandershtanko.quotations.di.modules.UseCaseModule;
 import com.alexandershtanko.quotations.di.modules.ViewModelModule;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 05/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 
 public class App extends Application {
@@ -38,6 +40,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         appComponent = buildComponent();
         dataComponent = buildDataComponent(appComponent);
         useCaseComponent = buildUseCaseComponent(dataComponent);

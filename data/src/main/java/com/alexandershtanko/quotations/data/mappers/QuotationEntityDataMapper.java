@@ -1,16 +1,16 @@
 package com.alexandershtanko.quotations.data.mappers;
 
 import com.alexandershtanko.quotations.data.models.QuotationEntity;
-import com.alexandershtanko.quotations.data.models.QuotationsResponseEntity;
+import com.alexandershtanko.quotations.data.models.QuotationsListEntity;
 import com.alexandershtanko.quotations.domain.models.Quotation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 06/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 
 public class QuotationEntityDataMapper {
@@ -24,10 +24,10 @@ public class QuotationEntityDataMapper {
         return quotation;
     }
 
-    public static List<Quotation> transform(QuotationsResponseEntity entity) {
+    public static List<Quotation> transform(QuotationsListEntity entity) {
         List<Quotation> quotations = new ArrayList<>();
-        if (entity != null && entity.getSubscribedList() != null && entity.getSubscribedList().getTicks() != null) {
-            for (QuotationEntity quotationEntity : entity.getSubscribedList().getTicks()) {
+        if (entity != null && entity.getTicks() != null) {
+            for (QuotationEntity quotationEntity : entity.getTicks()) {
                 quotations.add(transform(quotationEntity));
             }
         }

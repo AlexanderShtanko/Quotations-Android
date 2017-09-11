@@ -14,9 +14,9 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 07/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 @Module
 public class CacheModule {

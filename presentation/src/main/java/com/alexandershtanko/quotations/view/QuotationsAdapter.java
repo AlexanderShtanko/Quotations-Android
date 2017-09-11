@@ -19,9 +19,8 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 08/09/2017.
- *         Copyright Ostrovok.ru
  */
 
 public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.ViewHolder> {
@@ -30,25 +29,23 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
     private SortType sortType = SortType.SYMBOL;
 
     public Observable<String> getOnRemoveObservable() {
-        return onRemoveSubject;
+        return onRemoveSubject.hide();
     }
 
     public enum SortType {SYMBOL, BID, SPREAD}
 
     public void setSortType(SortType sortType) {
         this.sortType = sortType;
+        items.clear();
         List<Quotation> list = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             list.add(items.get(i));
         }
-        items.beginBatchedUpdates();
-        items.clear();
         items.addAll(list);
-        items.endBatchedUpdates();
     }
 
     public QuotationsAdapter() {
-        items = new SortedList<>(Quotation.class, new SortedList.BatchedCallback<>(new SortedList.Callback<Quotation>() {
+        items = new SortedList<>(Quotation.class, new SortedList.Callback<Quotation>() {
             @Override
             public int compare(Quotation o1, Quotation o2) {
                 switch (sortType) {
@@ -95,34 +92,36 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
             public void onMoved(int fromPosition, int toPosition) {
                 notifyItemMoved(fromPosition, toPosition);
             }
-        }));
+        });
     }
 
     public void setQuotations(List<Quotation> quotations) {
         items.beginBatchedUpdates();
-        for (Quotation quotation : quotations) {
-            items.add(quotation);
-        }
-        List<Quotation> toRemove = new ArrayList<>();
+        List<Quotation> toRemoveList = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             boolean flgFound = false;
             for (Quotation quotation : quotations) {
-                if (items.get(i).getSymbol().equals(quotation.getSymbol())) {
-                    items.add(quotation);
+                if (quotation.getSymbol().equals(items.get(i).getSymbol())) {
+                    items.updateItemAt(i, quotation);
                     flgFound = true;
                     break;
                 }
             }
-            if (!flgFound) {
-                toRemove.add(items.get(i));
+            if (!flgFound)
+                toRemoveList.add(items.get(i));
+        }
+
+        for (Quotation quotation : quotations) {
+            if (items.indexOf(quotation) == SortedList.INVALID_POSITION) {
+                items.add(quotation);
             }
         }
 
-        for (Quotation quotation : toRemove) {
+        for (Quotation quotation : toRemoveList) {
             items.remove(quotation);
         }
-
         items.endBatchedUpdates();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -157,7 +156,10 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
         }
 
         public void populate(Quotation quotation) {
-            removeButton.setOnClickListener(v -> onRemoveSubject.onNext(quotation.getSymbol()));
+            removeButton.setOnClickListener(v -> {
+                items.remove(quotation);
+                onRemoveSubject.onNext(quotation.getSymbol());
+            });
             symbol.setText(quotation.getSymbol());
             bidAsk.setText(quotation.getBid() + " / " + quotation.getAsk());
             spread.setText(quotation.getSpread());

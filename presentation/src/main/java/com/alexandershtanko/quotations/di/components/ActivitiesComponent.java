@@ -6,9 +6,9 @@ import com.alexandershtanko.quotations.view.activities.MainActivity;
 import dagger.Component;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 05/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 @Component(dependencies = {ViewModelComponent.class})
 @ActivityScope

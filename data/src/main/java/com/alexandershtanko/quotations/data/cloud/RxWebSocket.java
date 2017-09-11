@@ -1,8 +1,8 @@
 package com.alexandershtanko.quotations.data.cloud;
 
-import com.alexandershtanko.quotations.data.utils.ErrorUtils;
+import android.util.Log;
 
-import java.util.concurrent.TimeUnit;
+import com.alexandershtanko.quotations.data.utils.ErrorUtils;
 
 import javax.inject.Inject;
 
@@ -17,13 +17,14 @@ import okhttp3.WebSocketListener;
 import okio.ByteString;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 07/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 
 public class RxWebSocket {
 
+    private static final String TAG = "RxWebSocketLog";
     private final OkHttpClient okHttpClient;
     private final Request request;
     private WebSocket EMPTY_WEB_SOCKET = new WebSocket() {
@@ -77,6 +78,7 @@ public class RxWebSocket {
     }
 
     private boolean send(String message, WebSocket ws) {
+        Log.e(TAG, "send:" + message);
         return ws.send(message);
     }
 
@@ -89,11 +91,15 @@ public class RxWebSocket {
     }
 
     private Observable<WebSocket> getOrCreateWebSocket() {
-        return getWebSocket().throttleLast(500, TimeUnit.MILLISECONDS).map(ws -> {
+        return getWebSocket().map(ws -> {
             if (ws == EMPTY_WEB_SOCKET && !flgDoNotReconnect)
                 return createWebSocket();
             else return ws;
-        }).doOnSubscribe(disposable -> flgDoNotReconnect = false).doOnTerminate(this::closeWebSocket);
+        }).doOnSubscribe(disposable -> flgDoNotReconnect = false)
+                .doOnDispose(() -> {
+                    flgDoNotReconnect = true;
+                    this.closeWebSocket();
+                });
     }
 
     private Observable<WebSocket> onConnected() {
@@ -103,6 +109,8 @@ public class RxWebSocket {
     private synchronized WebSocket createWebSocket() {
         try {
             if (webSocketSubject.getValue() == EMPTY_WEB_SOCKET) {
+                Log.e(TAG, "Create websocket");
+
                 return okHttpClient.newWebSocket(request, webSocketListener);
             }
 
@@ -115,7 +123,6 @@ public class RxWebSocket {
 
     private synchronized void closeWebSocket() {
         try {
-            flgDoNotReconnect = true;
             WebSocket ws = webSocketSubject.getValue();
             if (ws != EMPTY_WEB_SOCKET) {
                 ws.cancel();
@@ -136,28 +143,45 @@ public class RxWebSocket {
     private class RxWebSocketListener extends WebSocketListener {
         @Override
         public void onOpen(WebSocket webSocket, Response response) {
+            Log.e(TAG, "On Open");
+
             webSocketSubject.onNext(webSocket);
         }
 
         @Override
         public void onMessage(WebSocket webSocket, String text) {
+            Log.e(TAG, "received: " + text);
+
             onMessageSubject.onNext(text);
         }
 
         @Override
         public void onClosing(WebSocket webSocket, int code, String reason) {
+            Log.e(TAG, "On Closing");
+
             webSocketSubject.onNext(EMPTY_WEB_SOCKET);
 
         }
 
         @Override
         public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+            Log.e(TAG, "On Failure");
+
             onFailureSubject.onNext(new OnFailureEvent(t, response));
+            tryToReconnect();
         }
 
         @Override
         public void onClosed(WebSocket webSocket, int code, String reason) {
+            Log.e(TAG, "On Closed");
+
         }
+    }
+
+    private void tryToReconnect() {
+        closeWebSocket();
+        if (!flgDoNotReconnect)
+            webSocketSubject.onNext(createWebSocket());
     }
 
     public static class OnFailureEvent {

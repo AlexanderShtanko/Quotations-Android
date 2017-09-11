@@ -17,9 +17,9 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 06/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 
 public class QuotationsDataRepository implements QuotationsRepository {
@@ -41,24 +41,20 @@ public class QuotationsDataRepository implements QuotationsRepository {
                 e.onNext(quotations);
         }).mergeWith(cloudDataStore.getQuotations()
                 .map(QuotationEntityDataMapper::transform)
-                .doOnNext(cacheDataStore::setQuotations));
+                .map(cacheDataStore::addQuotations));
     }
 
     @Override
     public Observable<Boolean> addInstruments(SubscribeUseCase.Params params) {
-
-        return cloudDataStore.subscribe(params.getNames()).doOnNext(res -> {
-            if (res)
-                cacheDataStore.addInstruments(params.getNames());
-        }).toFlowable(BackpressureStrategy.LATEST).toObservable();
+        cacheDataStore.addInstruments(params.getNames());
+        return cloudDataStore.subscribe(params.getNames()).toFlowable(BackpressureStrategy.BUFFER).toObservable();
     }
 
     @Override
     public Observable<Boolean> removeInstruments(UnsubscribeUseCase.Params params) {
+        cacheDataStore.removeInstruments(params.getNames());
         return cloudDataStore.unsubscribe(params.getNames()).doOnNext(res -> {
-            if (res)
-                cacheDataStore.removeInstruments(params.getNames());
-        }).toFlowable(BackpressureStrategy.LATEST).toObservable();
+        }).toFlowable(BackpressureStrategy.BUFFER).toObservable();
     }
 
     @Override

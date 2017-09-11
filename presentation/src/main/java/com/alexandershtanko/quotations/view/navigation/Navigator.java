@@ -11,9 +11,9 @@ import com.alexandershtanko.quotations.view.fragments.InstrumentsFragment;
 import com.alexandershtanko.quotations.view.fragments.QuotationsFragment;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 08/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 
 public class Navigator {

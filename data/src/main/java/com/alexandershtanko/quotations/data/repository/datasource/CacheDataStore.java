@@ -7,9 +7,9 @@ import java.util.List;
 import io.reactivex.Observable;
 
 /**
- * @author Alexander Shtanko ab.shtanko@gmail.com
+ * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 06/09/2017.
- *         Copyright Ostrovok.ru
+ *
  */
 
 public interface CacheDataStore {
@@ -20,4 +20,6 @@ public interface CacheDataStore {
     void removeInstruments(List<String> names);
     Observable<List<String>> getSelectedInstruments();
     Observable<List<String>> getInstruments();
+
+    List<Quotation> addQuotations(List<Quotation> quotations);
 }
