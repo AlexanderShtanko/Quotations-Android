@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">Quotations</string>
+    <string name="quotations">Quotations</string>
+    <string name="instruments">Instruments</string>
+    <string name="help">Help</string>
+    <string name="symbol">Symbol</string>
+    <string name="bid_ask">BID/ASK</string>
+    <string name="spread">Spread</string>
+    <string name="save">Save</string>
+    <string name="desc_help"><![CDATA[
+    <b>Quotations sort</b><br/>
+    <p>Press the header item to sort quotations by descending of appropriate parameter</p>
+    <br/><b>Instruments</b><br/>
+    <p>To remove instruments, press \'x\' button near appropriate quotation.</p>
+    <p>Also you can add/remove instruments on Instruments screen.</p>
+       <b>Author:</b> <a href="mailto:alexjcomp@gmail.com">Alexander Shtanko</a>
+    <br/><br/>
+    <b>Source code:</b>
+    <a href="https://bitbucket.org/alexandershtanko/exnessandroidproject/src">Bitbucket</a>
+]]></string>
+    <string name="remove_ok">Instruments removed successfully</string>
+    <string name="remove_failed">Instruments deletion was failed, check Internet connection and try again.</string>
+    <string name="add_ok">Instruments added successfully</string>
+    <string name="add_failed">Instruments deletion was failed, check Internet connection and try again.</string>
+    <string name="status">State</string>
+    <string name="connected">On</string>
+    <string name="disconnected">Off</string>
 </resources>

@@ -1,0 +1,84 @@
+ext {
+    //Android
+    androidBuildToolsVersion = "26.0.0"
+    androidMinSdkVersion = 15
+    androidTargetSdkVersion = 26
+    androidCompileSdkVersion = 26
+
+    //Libraries
+    appCompatVersion = "26.0.0-alpha1"
+    rxJavaVersion = "2.1.3"
+    butterKnifeVersion = "8.8.1"
+    rxBindingVersion = "2.0.0"
+    daggerVersion = "2.8"
+    okHttpVersion = "3.6.0"
+    jacksonVersion = "2.4.0"
+    apacheCommonsVersion = "3.3.2"
+    paperVersion = "2.1"
+
+    //Testing
+    robolectricVersion = '3.1.1'
+    jUnitVersion = '4.12'
+    assertJVersion = '1.7.1'
+    mockitoVersion = '1.9.5'
+    dexmakerVersion = '1.0'
+    espressoVersion = '2.0'
+    testingSupportLibVersion = '0.1'
+
+    presentationDependencies = [
+            appCompatV7        : "com.android.support:appcompat-v7:${appCompatVersion}",
+            design             : "com.android.support:design:${appCompatVersion}",
+            cardView           : "com.android.support:cardview-v7:${appCompatVersion}",
+            supportAnnotations : "com.android.support:support-annotations:${appCompatVersion}",
+            recyclerView       : "com.android.support:recyclerview-v7:${appCompatVersion}",
+            rxJava             : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            butterKnife        : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            butterKnifeCompiler: "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
+
+            rxBinding          : "com.jakewharton.rxbinding2:rxbinding:${rxBindingVersion}",
+            dagger             : "com.google.dagger:dagger:${daggerVersion}",
+            daggerCompiler     : "com.google.dagger:dagger-compiler:${daggerVersion}"
+    ]
+
+    presentationTestDependencies = [
+            junit            : "junit:junit:${jUnitVersion}",
+            mockito          : "org.mockito:mockito-core:${mockitoVersion}",
+            dexmaker         : "com.google.dexmaker:dexmaker:${dexmakerVersion}",
+            dexmakerMockito  : "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}",
+            espresso         : "com.android.support.test.espresso:espresso-core:${espressoVersion}",
+            testingSupportLib: "com.android.support.test:testing-support-lib:${testingSupportLibVersion}",
+    ]
+
+    domainDependencies = [
+            rxJava        : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            dagger        : "com.google.dagger:dagger:${daggerVersion}",
+            daggerCompiler: "com.google.dagger:dagger-compiler:${daggerVersion}",
+    ]
+
+    domainTestDependencies = [
+            junit  : "junit:junit:${jUnitVersion}",
+            mockito: "org.mockito:mockito-core:${mockitoVersion}",
+            assertj: "org.assertj:assertj-core:${assertJVersion}"
+    ]
+
+    dataDependencies = [
+            rxJava            : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            dagger            : "com.google.dagger:dagger:${daggerVersion}",
+            daggerCompiler    : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            okHttp            : "com.squareup.okhttp3:okhttp:${okHttpVersion}",
+            jacksonCore       : "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}",
+            jacksonAnnotations: "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
+            jacksonDatabind   : "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
+            apacheCommons     : "org.apache.commons:commons-lang3:${apacheCommonsVersion}",
+            paper             : "io.paperdb:paperdb:${paperVersion}"
+
+
+    ]
+
+    dataTestDependencies = [
+            junit      : "junit:junit:${jUnitVersion}",
+            assertj    : "org.assertj:assertj-core:${assertJVersion}",
+            mockito    : "org.mockito:mockito-core:${mockitoVersion}",
+            robolectric: "org.robolectric:robolectric:${robolectricVersion}",
+    ]
+}

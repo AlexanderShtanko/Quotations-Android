@@ -1,16 +1,17 @@
 apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    def globalConfig = rootProject.ext
+    compileSdkVersion globalConfig.androidCompileSdkVersion
+    buildToolsVersion globalConfig.androidBuildToolsVersion
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion globalConfig.androidMinSdkVersion
+        targetSdkVersion globalConfig.androidTargetSdkVersion
+        versionCode globalConfig.androidVersionCode
+        versionName globalConfig.androidVersionName
+        testInstrumentationRunner globalConfig.testInstrumentationRunner
 
     }
     buildTypes {
@@ -19,13 +20,57 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError false
+        ignoreWarnings true
+        disable 'InvalidPackage'            //Some libraries have issues with this.
+        disable 'OldTargetApi'
+    }
 }
 
+
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:26.+'
-    testCompile 'junit:junit:4.12'
+    def dataDependencies = rootProject.ext.dataDependencies
+    def testDependencies = rootProject.ext.dataTestDependencies
+
+    compile project(':domain')
+
+    compile dataDependencies.rxJava
+    compile dataDependencies.dagger
+    annotationProcessor dataDependencies.daggerCompiler
+    compile dataDependencies.okHttp
+    compile dataDependencies.jacksonCore
+    compile dataDependencies.jacksonAnnotations
+    compile dataDependencies.jacksonDatabind
+    compile dataDependencies.apacheCommons
+    compile dataDependencies.paper
+
+    androidTestCompile testDependencies.junit
+    androidTestCompile testDependencies.assertj
+    androidTestCompile testDependencies.mockito
+    androidTestCompile testDependencies.robolectric
+    androidTestCompile presentationTestDependencies.testingSupportLib
+
+
+    testCompile testDependencies.junit
+
+
+
+
 }
