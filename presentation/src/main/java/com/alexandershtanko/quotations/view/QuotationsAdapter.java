@@ -34,7 +34,7 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
 
     public enum SortType {SYMBOL, BID, SPREAD}
 
-    public void setSortType(SortType sortType) {
+    public synchronized void setSortType(SortType sortType) {
         this.sortType = sortType;
         items.clear();
         List<Quotation> list = new ArrayList<>();
@@ -95,14 +95,13 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
         });
     }
 
-    public void setQuotations(List<Quotation> quotations) {
+    public synchronized void setQuotations(List<Quotation> quotations) {
         items.beginBatchedUpdates();
         List<Quotation> toRemoveList = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             boolean flgFound = false;
             for (Quotation quotation : quotations) {
                 if (quotation.getSymbol().equals(items.get(i).getSymbol())) {
-                    items.updateItemAt(i, quotation);
                     flgFound = true;
                     break;
                 }
@@ -111,15 +110,24 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
                 toRemoveList.add(items.get(i));
         }
 
-        for (Quotation quotation : quotations) {
-            if (items.indexOf(quotation) == SortedList.INVALID_POSITION) {
-                items.add(quotation);
-            }
-        }
-
         for (Quotation quotation : toRemoveList) {
             items.remove(quotation);
         }
+
+        for (Quotation quotation : quotations) {
+            boolean flgFound = false;
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).getSymbol().equals(quotation.getSymbol())) {
+                    items.updateItemAt(i, quotation);
+                    flgFound = true;
+                    break;
+                }
+            }
+            if (!flgFound)
+                items.add(quotation);
+        }
+
+
         items.endBatchedUpdates();
         notifyDataSetChanged();
     }
