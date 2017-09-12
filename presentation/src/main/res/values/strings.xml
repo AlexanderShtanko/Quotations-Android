@@ -9,9 +9,10 @@
     <string name="save">Save</string>
     <string name="desc_help"><![CDATA[
     <b>Quotations sorting</b><br/>
+    <p>Press the header item to sort quotations ones by descending of appropriate parameter</p>
     <p>Long press the item and move to resort</p>
     <br/><b>Instruments</b><br/>
-    <p>To remove quotation, press \'x\' button near appropriate quotation or long press and swipe item out</p>
+    <p>To remove quotation, press \'x\' button near appropriate quotation or swipe item out</p>
     <p>Also you can add/remove instruments on Instruments screen.</p>
        <b>Author:</b> <a href="mailto:alexjcomp@gmail.com">Alexander Shtanko</a>
     <br/><br/>

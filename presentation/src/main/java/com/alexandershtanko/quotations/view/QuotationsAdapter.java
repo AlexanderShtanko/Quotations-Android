@@ -117,6 +117,41 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
         return items != null ? items.size() : 0;
     }
 
+    public void sortBySymbol() {
+        Collections.sort(items, (q1, q2) -> q1.getSymbol().compareTo(q2.getSymbol()));
+        notifyDataSetChanged();
+    }
+
+    public void sortByBid() {
+        Collections.sort(items, this::compareBid);
+        notifyDataSetChanged();
+    }
+
+    private int compareBid(Quotation o1, Quotation o2) {
+        try {
+            return Float.compare(Float.parseFloat(o1.getBid()), Float.parseFloat(o2.getBid()));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    ;
+
+    public void sortBySpread() {
+        Collections.sort(items, this::compareSpread);
+        notifyDataSetChanged();
+    }
+
+    private int compareSpread(Quotation o1, Quotation o2) {
+        try {
+            return Float.compare(Float.parseFloat(o1.getBid()), Float.parseFloat(o2.getBid()));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    ;
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.text_symbol)
         TextView symbol;

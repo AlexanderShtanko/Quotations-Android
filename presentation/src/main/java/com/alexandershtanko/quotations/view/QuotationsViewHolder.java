@@ -105,6 +105,11 @@ public class QuotationsViewHolder extends RxViewHolder {
         protected void onBind(CompositeDisposable s) {
             s.add(RxView.clicks(viewHolder.instrumentsButton).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(v -> Navigator.openInstruments(fragmentManager), ErrorUtils::log));
             s.add(RxView.clicks(viewHolder.helpButton).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(v -> Navigator.openHelp(fragmentManager), ErrorUtils::log));
+
+            s.add(RxView.clicks(viewHolder.symbol).throttleFirst(500,TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(v -> viewHolder.quotationsAdapter.sortBySymbol(), ErrorUtils::log));
+            s.add(RxView.clicks(viewHolder.bidAsk).throttleFirst(500,TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(v -> viewHolder.quotationsAdapter.sortByBid(), ErrorUtils::log));
+            s.add(RxView.clicks(viewHolder.spread).throttleFirst(500,TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(v -> viewHolder.quotationsAdapter.sortBySpread(), ErrorUtils::log));
+
             s.add(viewHolder.quotationsAdapter.getOnRemoveObservable()
                     .observeOn(Schedulers.io())
                     .switchMap(viewModel::removeQuotation)
