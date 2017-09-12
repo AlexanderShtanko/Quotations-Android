@@ -83,7 +83,7 @@ public class RxWebSocket {
     }
 
     public Observable<String> getMessagesObservable() {
-        return getOrCreateWebSocket().flatMap(ws -> onMessageSubject.hide());
+        return getOrCreateWebSocket().switchMap(ws -> onMessageSubject.hide());
     }
 
     private Observable<WebSocket> getWebSocket() {

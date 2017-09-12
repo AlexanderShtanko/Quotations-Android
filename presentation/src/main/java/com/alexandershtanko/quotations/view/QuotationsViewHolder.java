@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -29,7 +31,6 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 08/09/2017.
- *
  */
 
 public class QuotationsViewHolder extends RxViewHolder {
@@ -49,6 +50,36 @@ public class QuotationsViewHolder extends RxViewHolder {
     @BindView(R.id.text_status)
     TextView status;
 
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+        @Override
+        public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+            int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+            return makeMovementFlags(dragFlags, swipeFlags);
+        }
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return quotationsAdapter.onItemMove(viewHolder.getAdapterPosition(),
+                    target.getAdapterPosition());
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            quotationsAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+        }
+
+        @Override
+        public boolean isLongPressDragEnabled() {
+            return true;
+        }
+
+        @Override
+        public boolean isItemViewSwipeEnabled() {
+            return true;
+        }
+    });
+
     private QuotationsAdapter quotationsAdapter;
 
     public QuotationsViewHolder(Context context, int layoutRes) {
@@ -56,6 +87,9 @@ public class QuotationsViewHolder extends RxViewHolder {
         quotationsAdapter = new QuotationsAdapter();
         quotations.setLayoutManager(new LinearLayoutManager(context));
         quotations.setAdapter(quotationsAdapter);
+        quotations.setItemAnimator(null);
+        itemTouchHelper.attachToRecyclerView(quotations);
+
 
     }
 
@@ -69,12 +103,8 @@ public class QuotationsViewHolder extends RxViewHolder {
 
         @Override
         protected void onBind(CompositeDisposable s) {
-            s.add(RxView.clicks(viewHolder.instrumentsButton).throttleFirst(500,TimeUnit.MILLISECONDS).subscribe(v -> Navigator.openInstruments(fragmentManager), ErrorUtils::log));
-            s.add(RxView.clicks(viewHolder.helpButton).throttleFirst(500,TimeUnit.MILLISECONDS).subscribe(v -> Navigator.openHelp(fragmentManager), ErrorUtils::log));
-            s.add(RxView.clicks(viewHolder.symbol).throttleFirst(500,TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(v -> viewHolder.quotationsAdapter.setSortType(QuotationsAdapter.SortType.SYMBOL), ErrorUtils::log));
-            s.add(RxView.clicks(viewHolder.bidAsk).throttleFirst(500,TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(v -> viewHolder.quotationsAdapter.setSortType(QuotationsAdapter.SortType.BID), ErrorUtils::log));
-            s.add(RxView.clicks(viewHolder.spread).throttleFirst(500,TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(v -> viewHolder.quotationsAdapter.setSortType(QuotationsAdapter.SortType.SPREAD), ErrorUtils::log));
-
+            s.add(RxView.clicks(viewHolder.instrumentsButton).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(v -> Navigator.openInstruments(fragmentManager), ErrorUtils::log));
+            s.add(RxView.clicks(viewHolder.helpButton).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(v -> Navigator.openHelp(fragmentManager), ErrorUtils::log));
             s.add(viewHolder.quotationsAdapter.getOnRemoveObservable()
                     .observeOn(Schedulers.io())
                     .switchMap(viewModel::removeQuotation)
@@ -83,7 +113,7 @@ public class QuotationsViewHolder extends RxViewHolder {
                         Toast.makeText(viewHolder.getContext(), res ? R.string.remove_ok : R.string.remove_failed, Toast.LENGTH_LONG).show();
                     }, ErrorUtils::log));
 
-            s.add(viewModel.getQuotations().throttleLast(500, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setQuotations, ErrorUtils::log));
+            s.add(viewModel.getQuotations().toFlowable(BackpressureStrategy.LATEST).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setQuotations, ErrorUtils::log));
             s.add(viewModel.getConnectionState().throttleLast(500, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setConnectionState, ErrorUtils::log));
         }
     }
