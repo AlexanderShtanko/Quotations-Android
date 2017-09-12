@@ -14,12 +14,12 @@ import io.reactivex.Observable;
 /**
  * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 07/09/2017.
- *
  */
 
 public class PaperCacheDataStore implements CacheDataStore {
-    public static final String KEY_QUOTATIONS = "quotations";
-    public static final String KEY_INSTRUMENTS = "instruments";
+    private static final String KEY_QUOTATIONS = "quotations";
+    private static final String KEY_INSTRUMENTS = "instruments";
+    private static final String KEY_SORT = "sort";
     private final RxPaper rxPaper;
     private final static String BOOK_MAIN = "main";
     private final List<String> instruments;
@@ -29,6 +29,7 @@ public class PaperCacheDataStore implements CacheDataStore {
         this.rxPaper = rxPaper;
         this.instruments = instruments;
     }
+
 
     @Override
     public void setQuotations(List<Quotation> quotations) {
@@ -59,16 +60,28 @@ public class PaperCacheDataStore implements CacheDataStore {
     }
 
     @Override
+    public void updateSort(List<String> keys) {
+        rxPaper.write(BOOK_MAIN, KEY_SORT, keys);
+
+    }
+
+    @Override
+    public List<String> getSort() {
+        RxPaper.PaperObject<List<String>> tPaperObject = rxPaper.readOnce(BOOK_MAIN, KEY_SORT);
+        if (tPaperObject != null)
+            return tPaperObject.getObject();
+        return null;
+    }
+
+    @Override
     public List<Quotation> getQuotations() {
         RxPaper.PaperObject<List<Quotation>> obj = rxPaper.readOnce(BOOK_MAIN, KEY_QUOTATIONS);
         if (obj != null) {
             List<Quotation> quotations = obj.getObject();
-            List<Quotation> list=new ArrayList<>();
+            List<Quotation> list = new ArrayList<>();
             List<String> selectedInstruments = getSelectedInstrumentsOnce();
-            for(Quotation quotation:quotations)
-            {
-                if(selectedInstruments.contains(quotation.getSymbol()))
-                {
+            for (Quotation quotation : quotations) {
+                if (selectedInstruments.contains(quotation.getSymbol())) {
                     list.add(quotation);
                 }
             }

@@ -118,8 +118,10 @@ public class QuotationsViewHolder extends RxViewHolder {
                         Toast.makeText(viewHolder.getContext(), res ? R.string.remove_ok : R.string.remove_failed, Toast.LENGTH_LONG).show();
                     }, ErrorUtils::log));
 
+            s.add(viewHolder.quotationsAdapter.getOnSortChangeObservable().throttleLast(1000,TimeUnit.MILLISECONDS).observeOn(Schedulers.computation())
+                    .subscribe(viewModel::updateSort,ErrorUtils::log));
             s.add(viewModel.getQuotations().toFlowable(BackpressureStrategy.LATEST).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setQuotations, ErrorUtils::log));
-            s.add(viewModel.getConnectionState().throttleLast(500, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setConnectionState, ErrorUtils::log));
+            s.add(viewModel.getConnectionState().throttleLast(500, TimeUnit.MILLISECONDS).toFlowable(BackpressureStrategy.LATEST).observeOn(AndroidSchedulers.mainThread()).subscribe(viewHolder::setConnectionState, ErrorUtils::log));
         }
     }
 

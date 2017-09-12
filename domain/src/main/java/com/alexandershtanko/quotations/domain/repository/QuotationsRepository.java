@@ -21,4 +21,5 @@ public interface QuotationsRepository {
     Observable<List<String>> getSelectedInstruments();
     Observable<Boolean> getConnectionState();
     Observable<List<String>> getInstruments();
+    Observable<Boolean> updateSort(List<String> keys);
 }

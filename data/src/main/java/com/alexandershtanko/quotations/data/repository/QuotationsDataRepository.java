@@ -19,7 +19,6 @@ import io.reactivex.ObservableOnSubscribe;
 /**
  * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 06/09/2017.
- *
  */
 
 public class QuotationsDataRepository implements QuotationsRepository {
@@ -36,9 +35,20 @@ public class QuotationsDataRepository implements QuotationsRepository {
     @Override
     public Observable<List<Quotation>> getQuotations() {
         return Observable.create((ObservableOnSubscribe<List<Quotation>>) e -> {
+
             List<Quotation> quotations = cacheDataStore.getQuotations();
-            if (quotations != null)
+            if (quotations != null) {
+                List<String> sortOrder = cacheDataStore.getSort();
+                if (sortOrder != null)
+                    quotations.sort((q1, q2) -> {
+                        Integer ind1=sortOrder.indexOf(q1.getSymbol());
+                        Integer ind2=sortOrder.indexOf(q2.getSymbol());
+                        return ind1.compareTo(ind2);
+                    });
+
+
                 e.onNext(quotations);
+            }
         }).mergeWith(cloudDataStore.getQuotations()
                 .map(QuotationEntityDataMapper::transform)
                 .map(cacheDataStore::addQuotations));
@@ -65,6 +75,12 @@ public class QuotationsDataRepository implements QuotationsRepository {
     @Override
     public Observable<List<String>> getInstruments() {
         return cacheDataStore.getInstruments();
+    }
+
+    @Override
+    public Observable<Boolean> updateSort(List<String> keys) {
+        cacheDataStore.updateSort(keys);
+        return Observable.just(true);
     }
 
 

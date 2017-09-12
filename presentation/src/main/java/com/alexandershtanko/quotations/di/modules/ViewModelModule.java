@@ -7,6 +7,7 @@ import com.alexandershtanko.quotations.domain.interactor.GetInstrumentsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetQuotationsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetSelectedInstrumentsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.UnsubscribeUseCase;
+import com.alexandershtanko.quotations.domain.interactor.UpdateSortUseCase;
 import com.alexandershtanko.quotations.viewmodels.InstrumentsViewModel;
 import com.alexandershtanko.quotations.viewmodels.MainActivityViewModel;
 import com.alexandershtanko.quotations.viewmodels.QuotationsViewModel;
@@ -28,8 +29,8 @@ public class ViewModelModule {
 
     @ViewModelScope
     @Provides
-    QuotationsViewModel provideQuotationsViewModel(GetQuotationsUseCase getQuotationsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, UnsubscribeUseCase unsubscribeUseCase, GetConnectionStateUseCase getConnectionStateUseCase, SubscribeUseCase subscribeUseCase) {
-        return new QuotationsViewModel(getQuotationsUseCase, getSelectedInstrumentsUseCase, unsubscribeUseCase, getConnectionStateUseCase, subscribeUseCase);
+    QuotationsViewModel provideQuotationsViewModel(GetQuotationsUseCase getQuotationsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, UnsubscribeUseCase unsubscribeUseCase, GetConnectionStateUseCase getConnectionStateUseCase, SubscribeUseCase subscribeUseCase, UpdateSortUseCase updateSortUseCase) {
+        return new QuotationsViewModel(getQuotationsUseCase, getSelectedInstrumentsUseCase, unsubscribeUseCase, getConnectionStateUseCase, subscribeUseCase,updateSortUseCase);
     }
 
     @ViewModelScope

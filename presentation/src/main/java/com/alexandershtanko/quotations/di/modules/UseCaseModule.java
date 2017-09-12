@@ -7,6 +7,7 @@ import com.alexandershtanko.quotations.domain.interactor.GetInstrumentsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetQuotationsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetSelectedInstrumentsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.UnsubscribeUseCase;
+import com.alexandershtanko.quotations.domain.interactor.UpdateSortUseCase;
 import com.alexandershtanko.quotations.domain.repository.QuotationsRepository;
 
 import dagger.Module;
@@ -52,6 +53,12 @@ public class UseCaseModule {
     @UseCaseScope
     UnsubscribeUseCase RemoveQuotationUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
         return new UnsubscribeUseCase(repository, subscriptionScheduler);
+    }
+
+    @Provides
+    @UseCaseScope
+    UpdateSortUseCase provideUpdateSortUseCase(QuotationsRepository repository, Scheduler subscriptionScheduler) {
+        return new UpdateSortUseCase(repository, subscriptionScheduler);
     }
 
 }

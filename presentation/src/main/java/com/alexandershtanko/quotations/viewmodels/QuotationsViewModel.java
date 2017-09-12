@@ -1,14 +1,16 @@
 package com.alexandershtanko.quotations.viewmodels;
 
 import com.alexandershtanko.quotations.data.utils.ErrorUtils;
-import com.alexandershtanko.quotations.domain.interactor.SubscribeUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetConnectionStateUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetQuotationsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetSelectedInstrumentsUseCase;
+import com.alexandershtanko.quotations.domain.interactor.SubscribeUseCase;
 import com.alexandershtanko.quotations.domain.interactor.UnsubscribeUseCase;
+import com.alexandershtanko.quotations.domain.interactor.UpdateSortUseCase;
 import com.alexandershtanko.quotations.domain.models.Quotation;
 import com.alexandershtanko.quotations.utils.mvvm.RxViewModel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +22,6 @@ import io.reactivex.disposables.CompositeDisposable;
 /**
  * @author Alexander Shtanko alexjcomp@gmail.com
  *         Created on 08/09/2017.
- *
  */
 
 public class QuotationsViewModel extends RxViewModel {
@@ -28,15 +29,17 @@ public class QuotationsViewModel extends RxViewModel {
     private final UnsubscribeUseCase unsubscribeUseCase;
     private final GetConnectionStateUseCase getConnectionStateUseCase;
     private final GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase;
+    private final UpdateSortUseCase updateSortUseCase;
     private final SubscribeUseCase subscribeUseCase;
 
     @Inject
-    public QuotationsViewModel(GetQuotationsUseCase getQuotationsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, UnsubscribeUseCase unsubscribeUseCase, GetConnectionStateUseCase getConnectionStateUseCase, SubscribeUseCase subscribeUseCase) {
+    public QuotationsViewModel(GetQuotationsUseCase getQuotationsUseCase, GetSelectedInstrumentsUseCase getSelectedInstrumentsUseCase, UnsubscribeUseCase unsubscribeUseCase, GetConnectionStateUseCase getConnectionStateUseCase, SubscribeUseCase subscribeUseCase,UpdateSortUseCase updateSortUseCase) {
         this.getQuotationUseCase = getQuotationsUseCase;
         this.unsubscribeUseCase = unsubscribeUseCase;
         this.getConnectionStateUseCase = getConnectionStateUseCase;
         this.getSelectedInstrumentsUseCase = getSelectedInstrumentsUseCase;
         this.subscribeUseCase = subscribeUseCase;
+        this.updateSortUseCase=updateSortUseCase;
     }
 
     @Override
@@ -59,5 +62,13 @@ public class QuotationsViewModel extends RxViewModel {
 
     public Observable<Boolean> getConnectionState() {
         return getConnectionStateUseCase.execute();
+    }
+
+    public void updateSort(List<Quotation> list) {
+        List<String> keys = new ArrayList<>();
+        for (Quotation item : list) {
+            keys.add(item.getSymbol());
+        }
+        updateSortUseCase.execute(keys);
     }
 }

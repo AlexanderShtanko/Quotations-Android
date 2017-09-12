@@ -8,6 +8,7 @@ import com.alexandershtanko.quotations.domain.interactor.GetInstrumentsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetQuotationsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.GetSelectedInstrumentsUseCase;
 import com.alexandershtanko.quotations.domain.interactor.UnsubscribeUseCase;
+import com.alexandershtanko.quotations.domain.interactor.UpdateSortUseCase;
 
 import dagger.Component;
 
@@ -23,5 +24,7 @@ public interface UseCaseComponent {
     GetQuotationsUseCase GetQuotationsUseCase();
     GetSelectedInstrumentsUseCase GetSelectedInstrumentsUseCase();
     UnsubscribeUseCase RemoveQuotationUseCase();
+    UpdateSortUseCase UpdateSortUseCase();
+
 
 }

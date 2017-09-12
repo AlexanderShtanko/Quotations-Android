@@ -26,6 +26,7 @@ import io.reactivex.subjects.PublishSubject;
 
 public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.ViewHolder> {
     private PublishSubject<String> onRemoveSubject = PublishSubject.create();
+    private PublishSubject<List<Quotation>> onSortChangeSubject = PublishSubject.create();
     private List<Quotation> items = new ArrayList<>();
 
     public Observable<String> getOnRemoveObservable() {
@@ -42,6 +43,7 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
                 Collections.swap(items, i, i - 1);
             }
         }
+        onSortChangeSubject.onNext(new ArrayList<>(items));
         notifyItemMoved(fromPosition, toPosition);
         return true;
 
@@ -55,6 +57,11 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
         } catch (Exception e) {
             ErrorUtils.log(e);
         }
+    }
+
+
+    public Observable<List<Quotation>> getOnSortChangeObservable() {
+        return onSortChangeSubject.hide();
     }
 
 
@@ -119,11 +126,15 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
 
     public void sortBySymbol() {
         Collections.sort(items, (q1, q2) -> q1.getSymbol().compareTo(q2.getSymbol()));
+        onSortChangeSubject.onNext(new ArrayList<>(items));
+
         notifyDataSetChanged();
     }
 
     public void sortByBid() {
         Collections.sort(items, this::compareBid);
+        onSortChangeSubject.onNext(new ArrayList<>(items));
+
         notifyDataSetChanged();
     }
 
@@ -139,12 +150,14 @@ public class QuotationsAdapter extends RecyclerView.Adapter<QuotationsAdapter.Vi
 
     public void sortBySpread() {
         Collections.sort(items, this::compareSpread);
+        onSortChangeSubject.onNext(new ArrayList<>(items));
+
         notifyDataSetChanged();
     }
 
     private int compareSpread(Quotation o1, Quotation o2) {
         try {
-            return Float.compare(Float.parseFloat(o1.getBid()), Float.parseFloat(o2.getBid()));
+            return Float.compare(Float.parseFloat(o1.getSpread()), Float.parseFloat(o2.getSpread()));
         } catch (NumberFormatException e) {
             return 0;
         }

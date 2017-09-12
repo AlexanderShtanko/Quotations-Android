@@ -22,4 +22,7 @@ public interface CacheDataStore {
     Observable<List<String>> getInstruments();
 
     List<Quotation> addQuotations(List<Quotation> quotations);
+
+    void updateSort(List<String> keys);
+    List<String> getSort();
 }
